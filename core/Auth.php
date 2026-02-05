@@ -4,16 +4,26 @@ namespace Core;
 class Auth {
 
     public static function check(): bool {
-        return Session::get('user') !== null;
+        return isset($_SESSION['user_id']);
     }
 
-    public static function user() {
-        return Session::get('user');
+    public static function role(): ?string {
+        return $_SESSION['role'] ?? null;
     }
 
-    public static function role(string $role): void {
-        if (!self::check() || self::user()['role'] !== $role) {
-            header("Location: " . BASE_URL . "/auth/login");
+    public static function redirectIfLoggedIn(): void {
+        if (self::check()) {
+            switch (self::role()) {
+                case 'Admin':
+                    header("Location: " . BASE_URL . "/admin/dashboard");
+                    break;
+                case 'Agent':
+                    header("Location: " . BASE_URL . "/agent/dashboard");
+                    break;
+                case 'Client':
+                    header("Location: " . BASE_URL . "/client/dashboard");
+                    break;
+            }
             exit;
         }
     }

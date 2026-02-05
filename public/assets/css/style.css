@@ -318,6 +318,83 @@ body {
 .main-content {
     padding: 30px;
 }
+/* Header container */
+.header {
+    background: #ffffff;
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+}
+
+/* Left side layout */
+.header h4 {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Role switch container */
+.role-switch {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f8fafc;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+/* Role switch icon */
+.role-switch i {
+    color: #0d6efd;
+    font-size: 16px;
+}
+
+/* Select dropdown */
+.role-switch select {
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    padding: 2px 4px;
+}
+
+/* Remove default focus outline */
+.role-switch select:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+/* Right side (bell + username) */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-weight: 500;
+    color: #374151;
+}
+
+/* Bell icon */
+.header-right i {
+    font-size: 18px;
+    color: #6b7280;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Optional notification dot */
+.header-right i::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 7px;
+    height: 7px;
+    background: #ef4444;
+    border-radius: 50%;
+}
 
 /* ======== Header ======== */
 .header {
@@ -483,4 +560,138 @@ body {
 
 @media screen and (max-width:480px){
     .cards { grid-template-columns: repeat(1,1fr); }
+}
+
+
+.search {
+    padding: 7px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 220px;
+}
+
+/* ===== TABLE ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #d1d5db;
+}
+th, td {
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+    text-align: center;
+}
+th {
+    background: #f8fafc;
+    font-weight: 600;
+}
+tr:hover {
+    background: #f1f5f9;
+}
+
+/* ===== STATUS ===== */
+.ok {
+    color: #065f46;
+    background: #d1fae5;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    border: 1px solid #6ee7b7;
+}
+.off {
+    color: #7f1d1d;
+    background: #fee2e2;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    border: 1px solid #fca5a5;
+}
+
+/* ===== BUTTONS ===== */
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cbd5e1;
+    background: #f9fafb;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #111827;
+    text-decoration: none;
+}
+.icon-btn:hover {
+    background: #e5e7eb;
+}
+
+
+/* ===== ADMIN MAIN CONTENT ===== */
+.content-wrapper {
+    margin-left: 240px;           /* sidebar width */
+    padding: 20px 24px;
+    width: calc(100% - 240px);
+    min-height: 100vh;
+    background: #f3f4f6;
+}
+
+/* Remove bootstrap container limits */
+.content-wrapper .container,
+.content-wrapper .container-fluid {
+    max-width: 100% !important;
+    padding: 0;
+}
+
+/* Card refinement */
+.card {
+    border-radius: 8px;
+}
+/* ===== USERS TABLE REFINEMENTS ===== */
+
+/* Reduce overall table font */
+.table {
+    font-size: 13px;
+}
+
+/* Header font slightly stronger */
+.table thead th {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Neutral role badges */
+.badge-role {
+    background: #e5e7eb;
+    color: #111827;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* Neutral status badges */
+.badge-status {
+    background: #f1f5f9;
+    color: #334155;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* Action buttons smaller */
+.btn-sm {
+    padding: 3px 6px;
+    font-size: 12px;
+}
+
+/* Page title smaller & cleaner */
+.content-wrapper h4 {
+    font-size: 18px;
+}
+
+/* Search input smaller */
+#userSearch {
+    font-size: 13px;
+    padding: 6px 10px;
 }

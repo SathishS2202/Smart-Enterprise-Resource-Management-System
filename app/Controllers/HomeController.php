@@ -2,12 +2,16 @@
 namespace App\Controllers;
 
 use Core\Controller;
+use Core\Auth;
+
 
 class HomeController extends Controller {
 
     public function index() {
-        $this->render('home/index', [
-            'title' => 'Support Center'
-        ]);
-    }
+
+    // 🚫 Logged-in users should not see home
+    Auth::redirectIfLoggedIn();
+
+    $this->render('home/index');
+}
 }

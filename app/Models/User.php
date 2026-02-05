@@ -127,7 +127,118 @@ public function deletePasswordResetToken($token) {
     $stmt->bind_param("s", $token);
     $stmt->execute();
 }
+public function toggleStatus($id, $status) {
+        $stmt = $this->db->conn->prepare("UPDATE users SET status=? WHERE id=?");
+        $stmt->bind_param("si", $status, $id);
+        return $stmt->execute();
+    }
+
+    // 🔹 Get all roles
+  public function getAll()
+{
+    $sql = "
+        SELECT users.*, roles.role_name
+        FROM users
+        JOIN roles ON users.role_id = roles.id
+        ORDER BY users.id DESC
+    ";
+
+    $stmt = $this->db->conn->prepare($sql);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+public function getRoles()
+{
+    $sql = "SELECT id, role_name FROM roles";
+    $result = mysqli_query($this->db->conn, $sql);
+
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+public function getAllWithRoles()
+{
+    $sql = "
+        SELECT users.id, users.name, users.username, users.email,
+                users.status, roles.role_name
+        FROM users
+        JOIN roles ON users.role_id = roles.id
+    ";
+
+    $stmt = $this->db->conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+public function exists($id)
+{
+    $stmt = $this->db->conn->prepare(
+        "SELECT id FROM users WHERE id=? LIMIT 1"
+    );
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    return $stmt->get_result()->num_rows > 0;
+}
+
+public function delete($id)
+{
+    $stmt = $this->db->conn->prepare(
+        "DELETE FROM users WHERE id=?"
+    );
+    $stmt->bind_param("i", $id);
+    return $stmt->execute();
+}
+
+public function updateStatus($id, $status)
+{
+    $db = \Core\Database::getInstance()->conn;
+
+    $stmt = $db->prepare("UPDATE users SET status = ? WHERE id = ?");
+    $stmt->bind_param("si", $status, $id);
+    $stmt->execute();
+}
+
+public function update($id, $data)
+{
+   $stmt = $this->db->conn->prepare(
+    "UPDATE users 
+     SET name=?, username=?, email=?, role_id=?, status=?
+     WHERE id=?"
+);
+
+$stmt->bind_param(
+    "sssisi",   // 👈 status = s (string), role_id & id = i
+    $data['name'],
+    $data['username'],
+    $data['email'],
+    $data['role_id'],
+    $data['status'],
+    $id
+);
+
+$stmt->execute();
+
+}
+// User.php
+// Fetch users by role name (Agent, Client)
+public function getByRoleName(string $roleName): array {
+    $sql = "
+        SELECT users.id, users.name
+        FROM users
+        JOIN roles ON users.role_id = roles.id
+        WHERE roles.role_name = ?
+        ORDER BY users.name ASC
+    ";
+    $stmt = $this->db->conn->prepare($sql);
+    $stmt->bind_param("s", $roleName);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
 
 
+
+    // 🔹 Create user
+   
     // Add more CRUD methods as needed (create, update, delete)
 }

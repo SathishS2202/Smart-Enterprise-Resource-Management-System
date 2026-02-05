@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use Core\Auth;
 
 use Core\Controller;
 use App\Models\User;
@@ -17,11 +18,15 @@ class AuthController extends Controller {
     }
 
     // Show login page
-    public function login() {
-        $this->render('auth/login', [
-            'title' => 'Login'
-        ]);
-    }
+   public function login() {
+
+    // 🚫 If already logged in, kick them out of login page
+    Auth::redirectIfLoggedIn();
+
+    $this->render('auth/login', [
+        'title' => 'Login'
+    ]);
+}
 
     // Handle login POST
     public function authenticate() {
@@ -48,17 +53,24 @@ class AuthController extends Controller {
         $_SESSION['role']      = $user['role_name'];
 
         // Role-based redirect
-        switch ($user['role_name']) {
-            case 'Admin':
-                $this->redirect('admin/dashboard');
-            case 'Agent':
-                $this->redirect('agent/dashboard');
-            case 'Client':
-                $this->redirect('client/dashboard');
-            default:
-                session_destroy();
-                $this->redirect('auth/login');
-        }
+       switch ($user['role_name']) {
+    case 'Admin':
+        $this->redirect('admin/dashboard');
+        break;
+
+    case 'Agent':
+        $this->redirect('agent/dashboard');
+        break;
+
+    case 'Client':
+        $this->redirect('client/dashboard');
+        break;
+
+    default:
+        session_destroy();
+        $this->redirect('auth/login');
+}
+
     }
 
     // Logout
