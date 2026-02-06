@@ -9,6 +9,8 @@ use App\Models\Task;
 use App\Models\Leave;
 use App\Models\RequestModel;
 use App\Models\Attendance;
+use App\Models\Document;
+use App\Models\ReportModels;
 
 class AdminController extends Controller
 {
@@ -18,6 +20,7 @@ class AdminController extends Controller
     private $leaveModel;
     private $requestModel;
     private $attendanceModel;
+    private $documentModel;
 
     public function __construct()
     {
@@ -30,6 +33,8 @@ class AdminController extends Controller
         $this->leaveModel    = new Leave();
         $this->requestModel = new RequestModel();
         $this->attendanceModel = new Attendance();
+        $this->documentModel = new Document();
+
     }
 
     /* ================= DASHBOARD ================= */
@@ -373,16 +378,16 @@ public function tasksAssignAgent() {
     }
 }
 // List Attendance
-public function attendance() {
-    $attendance = $this->attendanceModel->getAll();
-    $this->render('admin/attendance/index', compact('attendance'));
-}
+
+
 
 // Add Attendance
-public function attendanceCreate() {
-    $users = $this->attendanceModel->getUsers();
-    $this->render('admin/attendance/create', compact('users'));
+public function attendance()
+{
+    $attendances = $this->attendanceModel->getAll();
+    $this->render('admin/attendance/index', compact('attendances'));
 }
+
 
 public function attendanceStore() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -434,8 +439,180 @@ public function attendanceDelete() {
     header("Location: " . BASE_URL . "/admin/attendance");
     exit;
 }
+public function documents() {
+    $documents = $this->documentModel->getAll();
+    $this->render('admin/documents/index', compact('documents'));
+}
+public function documentsCreate() {
+    $this->render('admin/documents/create');
+}
+public function documentsDelete() {
+    $id = (int)$_GET['id'];
+    $doc = $this->documentModel->getById($id);
+
+    if ($doc) {
+        @unlink(BASE_PATH.'/public/'.$doc['file_path']);
+        $this->documentModel->delete($id);
+    }
+
+    $_SESSION['doc_msg'] = [
+        'type' => 'success',
+        'text' => 'Document deleted'
+    ];
+
+    header("Location: ".BASE_URL."/admin/documents");
+}
+public function documentsStore() {
+
+    $file = $_FILES['document'];
+    $fileName = time().'_'.$file['name'];
+    $uploadPath = 'uploads/documents/'.$fileName;
+
+    move_uploaded_file($file['tmp_name'], BASE_PATH.'/public/'.$uploadPath);
+
+    $this->documentModel->create([
+        'title' => $_POST['title'],
+        'file_path' => $uploadPath,
+        'uploaded_by' => $_SESSION['user_id']
+    ]);
+
+    $_SESSION['doc_msg'] = [
+        'type' => 'success',
+        'text' => 'Document uploaded successfully'
+    ];
+
+    header("Location: ".BASE_URL."/admin/documents");
+}
+public function documentView()
+{
+    $id = $_GET['id'] ?? null;
+
+    if (!$id) {
+        header("Location: " . BASE_URL . "/admin/documents");
+        exit;
+    }
+
+    $document = $this->documentModel->findById($id);
+
+    if (!$document) {
+        $_SESSION['doc_msg'] = [
+            'type' => 'error',
+            'text' => 'Document not found'
+        ];
+        header("Location: " . BASE_URL . "/admin/documents");
+        exit;
+    }
+
+    $this->view('admin/documents/view', [
+        'title' => 'View Document',
+        'document' => $document
+    ]);
+}
+public function reports()
+{
+    // USERS
+    $totalUsers = $this->userModel->countAll();
+    $rolesData = $this->userModel->countByRoles();
+    $userGrowth = $this->userModel->weeklyGrowth();
+
+    // PROJECTS
+    $totalProjects = $this->projectModel->countAll();
+    $projectStatus = $this->projectModel->countByStatus();
+    $projectsPerAgent = $this->projectModel->countPerAgent();
+
+    // TASKS
+    $totalTasks = $this->taskModel->countAll();
+    $taskStatus = $this->taskModel->countByStatus();
+   
+
+    // ATTENDANCE
+    $attendanceStats = $this->attendanceModel->presentVsAbsent();
+    $attendanceWeekly = $this->attendanceModel->weeklyAttendance();
+
+    $this->render('admin/reports/index', compact(
+    'totalUsers',
+    'rolesData',
+    'userGrowth',
+    'totalProjects',
+    'projectStatus',
+    'projectsPerAgent',
+    'totalTasks',
+    'taskStatus',
+    'attendanceStats',
+    'attendanceWeekly'
+));
+
+}
+public function profile()
+    {
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: " . BASE_URL . "/login");
+            exit;
+        }
+
+        $user = $this->userModel->findById($_SESSION['user_id']);
+
+        $this->render('admin/profile/index', compact('user'));
+    }
+
+    public function logout()
+{
+    session_start();
+
+    // Unset all session variables
+    $_SESSION = [];
+
+    // Destroy session
+    session_destroy();
+
+    // Redirect to login page
+    header('Location: ' . BASE_URL . '/auth/login');
+    exit;
+}
+
+public function changePassword()
+{
 
 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $current = $_POST['current_password'] ?? '';
+        $new     = $_POST['new_password'] ?? '';
+        $confirm = $_POST['confirm_password'] ?? '';
+
+        if ($new !== $confirm) {
+            $_SESSION['profile_msg'] = [
+                'type' => 'danger',
+                'text' => 'New password and confirm password do not match'
+            ];
+            header('Location: ' . BASE_URL . '/admin/changePassword');
+            exit;
+        }
+
+        $user = $this->userModel->findById($userId);
+
+        if (!password_verify($current, $user['password'])) {
+            $_SESSION['profile_msg'] = [
+                'type' => 'danger',
+                'text' => 'Current password is incorrect'
+            ];
+            header('Location: ' . BASE_URL . '/admin/changePassword');
+            exit;
+        }
+
+        $hashed = password_hash($new, PASSWORD_DEFAULT);
+        $this->userModel->updatePassword($userId, $hashed);
+
+        $_SESSION['profile_msg'] = [
+            'type' => 'success',
+            'text' => 'Password updated successfully'
+        ];
+
+        header('Location: ' . BASE_URL . '/admin/profile');
+        exit;
+    }
+
+    $this->render('admin/profile/change_password');
+}
 
 }
 

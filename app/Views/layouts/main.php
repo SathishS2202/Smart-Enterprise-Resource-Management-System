@@ -1,3 +1,11 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$role = $_SESSION['role'] ?? null;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,12 +19,12 @@
 
 <body>
 
-<?php if ($_SESSION['role'] === 'Admin'): ?>
+<?php if ($role === 'Admin'): ?>
     <?php require BASE_PATH . '/app/Views/layouts/admin_sidebar.php'; ?>
 <?php endif; ?>
 
 <div class="main">
-    <?php if ($_SESSION['role'] === 'Admin'): ?>
+    <?php if ($role === 'Admin'): ?>
         <?php require BASE_PATH . '/app/Views/layouts/admin_header.php'; ?>
     <?php endif; ?>
 

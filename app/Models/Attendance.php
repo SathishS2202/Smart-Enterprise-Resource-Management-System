@@ -14,17 +14,26 @@ class Attendance {
     /**
      * Get all attendance records with user names
      */
-   public function getAll(): array {
+   public function getAll(): array
+{
     $sql = "
-        SELECT a.id, a.date, a.status, u.name AS user_name
+        SELECT 
+            a.id,
+            a.user_id,
+            a.date,
+            a.status,
+            u.name AS user_name
         FROM attendance a
         LEFT JOIN users u ON a.user_id = u.id
         ORDER BY a.date DESC
     ";
+
     $stmt = $this->db->conn->prepare($sql);
     $stmt->execute();
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
+
+
 
     /**
      * Get a single attendance record by ID
@@ -98,4 +107,55 @@ class Attendance {
         $result = $this->db->conn->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
+    public function presentVsAbsent()
+{
+    $present = $this->db->conn
+        ->query("SELECT COUNT(*) total FROM attendance WHERE status='Present'")
+        ->fetch_assoc()['total'];
+
+    $totalUsers = $this->db->conn
+        ->query("SELECT COUNT(*) total FROM users")
+        ->fetch_assoc()['total'];
+
+    return [
+        'present'=>$present,
+        'absent'=>$totalUsers - $present
+    ];
+}
+
+public function weeklyAttendance()
+{
+    $labels = [];
+    $data = [];
+
+    for($i=6;$i>=0;$i--){
+        $day = date('Y-m-d', strtotime("-$i days"));
+        $labels[] = date('d M', strtotime($day));
+
+        $stmt = $this->db->conn->prepare(
+            "SELECT COUNT(*) total FROM attendance 
+             WHERE date=? AND status='Present'"
+        );
+        $stmt->bind_param("s",$day);
+        $stmt->execute();
+        $data[] = $stmt->get_result()->fetch_assoc()['total'];
+    }
+
+    return compact('labels','data');
+}
+
+public function todayStatus(int $agentId): ?string
+{
+    $stmt = $this->db->conn->prepare(
+        "SELECT status FROM attendance 
+         WHERE user_id = ? AND date = CURDATE()"
+    );
+    $stmt->bind_param("i", $agentId);
+    $stmt->execute();
+
+    $row = $stmt->get_result()->fetch_assoc();
+    return $row['status'] ?? 'Not Marked';
+}
+
 }

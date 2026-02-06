@@ -113,6 +113,15 @@ public function getById(int $id): array {
     $stmt->execute();
     return $stmt->get_result()->fetch_assoc();
 }
+public function countAll(): int
+{
+    $sql = "SELECT COUNT(*) AS total FROM projects";
+    $stmt = $this->db->conn->prepare($sql);
+    $stmt->execute();
+
+    $result = $stmt->get_result()->fetch_assoc();
+    return (int) $result['total'];
+}
 
 public function update(int $id, array $data): bool {
     $stmt = $this->db->conn->prepare("
@@ -143,6 +152,53 @@ public function delete(int $id): bool {
     $stmt->bind_param("i",$id);
     return $stmt->execute();
 }
+public function countByStatus(): array
+{
+    $sql = "
+        SELECT status, COUNT(*) AS total
+        FROM projects
+        GROUP BY status
+    ";
+
+    $stmt = $this->db->conn->prepare($sql);
+    $stmt->execute();
+
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+public function countPerAgent(): array
+{
+    $sql = "
+        SELECT u.name AS agent, COUNT(p.id) AS total
+        FROM projects p
+        JOIN users u ON p.agent_id = u.id
+        GROUP BY p.agent_id
+    ";
+
+    $stmt = $this->db->conn->prepare($sql);
+    $stmt->execute();
+
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+public function countByAgent(int $agentId): int
+{
+    $stmt = $this->db->conn->prepare(
+        "SELECT COUNT(*) AS total FROM projects WHERE agent_id = ?"
+    );
+    $stmt->bind_param("i", $agentId);
+    $stmt->execute();
+
+    return $stmt->get_result()->fetch_assoc()['total'] ?? 0;
+}
+ public function getByAgent(int $agentId): array
+    {
+        $sql = "SELECT * FROM projects WHERE agent_id = $agentId ORDER BY start_date DESC";
+        return $this->db->fetchAll($sql);
+    }
+
+
+
+
 
 
 

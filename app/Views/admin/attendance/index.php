@@ -36,14 +36,28 @@
                             <td><?= htmlspecialchars($a['date']) ?></td>
                             <td class="text-center">
                                 <?php
-                                switch($a['status']) {
-                                    case 'Pending': echo "<span class='badge bg-warning text-dark'>Pending</span>"; break;
-                                    case 'In Progress': echo "<span class='badge bg-primary text-white'>In Progress</span>"; break;
-                                    case 'Completed': echo "<span class='badge bg-success text-white'>Completed</span>"; break;
-                                    case 'On Hold': echo "<span class='badge bg-secondary text-white'>On Hold</span>"; break;
-                                    default: echo "<span class='badge bg-light text-dark'>Unknown</span>";
-                                }
-                                ?>
+switch ($a['status']) {
+    case 'Present':
+        echo "<span class='badge bg-success px-2 py-1 mt-2' style='font-size:11px;'>Present</span>";
+        break;
+
+    case 'Absent':
+        echo "<span class='badge bg-danger px-2 py-1 mt-2' style='font-size:11px;'>Absent</span>";
+        break;
+
+    case 'Late':
+        echo "<span class='badge bg-warning text-dark px-2 py-1 mt-2' style='font-size:11px;'>Late</span>";
+        break;
+
+    case 'Leave':
+        echo "<span class='badge bg-info text-dark px-2 py-1 mt-2' style='font-size:11px;'>Leave</span>";
+        break;
+
+    default:
+        echo "<span class='badge bg-secondary px-2 py-1 mt-2' style='font-size:11px;'>Unknown</span>";
+}
+?>
+
                             </td>
                             <td>
                                 <a href="<?= BASE_URL ?>/admin/attendanceEdit?id=<?= $a['id'] ?>" class="btn btn-sm btn-outline-primary me-1">

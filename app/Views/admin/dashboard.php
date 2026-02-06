@@ -1,3 +1,5 @@
+<?php require_once BASE_PATH . '/app/Views/layouts/admin_sidebar.php'; ?>
+<?php require_once BASE_PATH . '/app/Views/layouts/admin_header.php'; ?>
 <h3>Welcome Admin </h3>
 
 <div class="cards"> <div class="card"><h5>Total Users</h5><span><?= $totalUsers ?></span></div> <div class="card"><h5>Total Agents</h5><span><?= $totalAgents ?></span></div> <div class="card"><h5>Total Clients</h5><span><?= $totalClients ?></span></div> <div class="card"><h5>Total Projects</h5><span><?= $totalProjects ?></span></div> <div class="card"><h5>Pending Leaves</h5><span><?= $pendingLeaves ?></span></div> <div class="card"><h5>Pending Requests</h5><span><?= $totalRequests ?></span></div> </div>

@@ -220,6 +220,72 @@ $stmt->bind_param(
 $stmt->execute();
 
 }
+public function countByRoles(): array
+{
+    $sql = "
+        SELECT r.role_name AS role, COUNT(u.id) AS total
+        FROM users u
+        JOIN roles r ON u.role_id = r.id
+        GROUP BY r.role_name
+    ";
+
+    $stmt = $this->db->conn->prepare($sql);
+    $stmt->execute();
+
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+public function countByStatus()
+{
+    $sql = "
+        SELECT status, COUNT(*) AS total
+        FROM projects
+        GROUP BY status
+    ";
+
+    $result = $this->db->query($sql);
+
+    $labels = [];
+    $data   = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $labels[] = $row['status'];
+        $data[]   = (int)$row['total'];
+    }
+
+    return [
+        'labels' => $labels,
+        'data'   => $data
+    ];
+}
+
+public function countPerAgent()
+{
+    $sql = "
+        SELECT u.name, COUNT(p.id) AS total
+        FROM projects p
+        JOIN users u ON p.agent_id = u.id
+        GROUP BY u.id
+    ";
+
+    $result = $this->db->query($sql);
+
+    $labels = [];
+    $data   = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $labels[] = $row['name'];
+        $data[]   = (int)$row['total'];
+    }
+
+    return [
+        'labels' => $labels,
+        'data'   => $data
+    ];
+}
+
+
+
 // User.php
 // Fetch users by role name (Agent, Client)
 public function getByRoleName(string $roleName): array {
@@ -234,6 +300,57 @@ public function getByRoleName(string $roleName): array {
     $stmt->bind_param("s", $roleName);
     $stmt->execute();
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+public function weeklyGrowth(): array
+{
+    $labels = [];
+    $data   = [];
+
+    for ($i = 6; $i >= 0; $i--) {
+        $date = date('Y-m-d', strtotime("-$i days"));
+
+        $sql = "
+            SELECT COUNT(*) AS total
+            FROM users
+            WHERE DATE(created_at) = ?
+        ";
+
+        $stmt = $this->db->conn->prepare($sql);
+        $stmt->bind_param("s", $date);
+        $stmt->execute();
+
+        $result = $stmt->get_result()->fetch_assoc();
+
+        $labels[] = date('d M', strtotime($date));
+        $data[]   = (int) $result['total'];
+    }
+
+    return [
+        'labels' => $labels,
+        'data'   => $data
+    ];
+}
+public function findById(int $id): array|null
+{
+    $sql = "
+        SELECT 
+            u.id,
+            u.name,
+            u.email,
+            u.username,
+            r.role_name
+        FROM users u
+        JOIN roles r ON u.role_id = r.id
+        WHERE u.id = ?
+        LIMIT 1
+    ";
+
+    $stmt = $this->db->conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+
+    return $stmt->get_result()->fetch_assoc();
 }
 
 

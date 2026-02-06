@@ -24,5 +24,5 @@ $role = $user['role'] ?? '';
         <a href="<?= BASE_URL ?>/client/requests"><i class="bi bi-inbox"></i><span>Requests</span></a>
     <?php endif; ?>
 
-    <a href="<?= BASE_URL ?>/auth/logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+    <a href="<?= BASE_URL ?>/auth/logout"><i class="bi bi-box-arrow-right"></i><span>L</span></a>
 </div> -->

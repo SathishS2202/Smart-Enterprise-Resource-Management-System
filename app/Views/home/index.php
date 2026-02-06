@@ -4,7 +4,7 @@
     body {
     background: linear-gradient(
         180deg,
-        #f8fafc 0%,
+        #e5edf5 0%,
         #eef2f7 100%
     );
     color: #0f172a;
