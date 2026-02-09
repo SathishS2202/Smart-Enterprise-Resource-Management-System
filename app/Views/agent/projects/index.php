@@ -1,55 +1,66 @@
-<?php require_once BASE_PATH . '/app/Views/layouts/agent_header.php'; ?>
-<?php require_once BASE_PATH . '/app/Views/layouts/agent_sidebar.php'; ?>
+<?php require_once __DIR__ . '/../../layouts/agent_header.php'; ?>
+<?php require_once __DIR__ . '/../../layouts/agent_sidebar.php'; ?>
 
-<div class="container-fluid px-4 pt-4">
-    <h3>My Projects</h3>
+<div class="container-fluid px-4 pt-3">
 
-    <div class="card table-container mt-3">
-        <table class="table table-bordered table-hover align-middle">
+    <h5 class="mb-3">My Projects</h5>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm align-middle">
             <thead class="table-light">
                 <tr>
                     <th>#</th>
                     <th>Project Name</th>
-                    <th>Description</th>
                     <th>Status</th>
-                    <th>Tasks Completed</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Actions</th>
+                    <th>Tasks</th>
+                    <th>Action</th>
                 </tr>
             </thead>
+
             <tbody>
-                <?php if(!empty($projects)):
-                    $i = 1;
-                    foreach($projects as $p): ?>
+            <?php if (!empty($projects)): ?>
+                <?php foreach ($projects as $index => $project): ?>
                     <tr>
-                        <td><?= $i++ ?></td>
-                        <td><?= htmlspecialchars($p['name']) ?></td>
-                        <td><?= htmlspecialchars(substr($p['description'],0,50)) ?>...</td>
+                        <td><?= $index + 1 ?></td>
+
+                        <td><?= htmlspecialchars($project['name']) ?></td>
+
                         <td>
-                            <span class="badge <?= $p['status']=='Active'?'bg-primary':($p['status']=='Completed'?'bg-success':($p['status']=='Pending'?'bg-warning':'bg-secondary')) ?>">
-                                <?= $p['status'] ?>
+                            <span class="badge bg-info">
+                                <?= htmlspecialchars($project['status']) ?>
                             </span>
                         </td>
+
                         <td>
-                            <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: <?= $p['total_tasks']>0 ? ($p['completed_tasks']/$p['total_tasks']*100) : 0 ?>%"></div>
-                            </div>
-                            <small><?= $p['completed_tasks'] ?>/<?= $p['total_tasks'] ?></small>
+                            <?= $project['completed_tasks'] ?>
+                            /
+                            <?= $project['total_tasks'] ?>
                         </td>
-                        <td><?= $p['start_date'] ?></td>
-                        <td><?= $p['end_date'] ?></td>
+
                         <td>
-                            <a href="<?= BASE_URL ?>/agent/projectView/<?= $p['id'] ?>" class="icon-btn"><i class="fa fa-eye"></i></a>
-                            <a href="<?= BASE_URL ?>/agent/tasks?project_id=<?= $p['id'] ?>" class="icon-btn"><i class="fa fa-tasks"></i></a>
+                            <?php if ($project['status'] === 'In Progress'): ?>
+                                <form method="post" action="<?= BASE_URL ?>/agent/submitForReview">
+                                    <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
+                                    <button class="btn btn-sm btn-success">
+                                        Submit for Review
+                                    </button>
+                                </form>
+                            <?php else: ?>
+                                <span class="text-muted">—</span>
+                            <?php endif; ?>
                         </td>
                     </tr>
-                <?php endforeach; else: ?>
-                    <tr><td colspan="8" class="text-center text-muted">No projects assigned yet</td></tr>
-                <?php endif; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="5" class="text-center text-muted">
+                        No projects assigned
+                    </td>
+                </tr>
+            <?php endif; ?>
             </tbody>
         </table>
     </div>
 </div>
 
-<?php require_once BASE_PATH . '/app/Views/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../../layouts/footer.php'; ?>

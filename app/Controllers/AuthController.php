@@ -87,48 +87,59 @@ class AuthController extends Controller {
     }
 
     // Handle register POST
-    public function store() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('auth/register');
-        }
-
-        $data = [
-            'name'                  => trim($_POST['name'] ?? ''),
-            'email'                 => trim($_POST['email'] ?? ''),
-            'username'              => trim($_POST['username'] ?? ''),
-            'password'              => $_POST['password'] ?? '',
-            'password_confirmation' => $_POST['password_confirmation'] ?? '',
-        ];
-
-        // Basic validation
-        if (empty($data['name']) || empty($data['email']) || empty($data['username']) || empty($data['password'])) {
-            $this->render('auth/register', [
-                'error' => 'All fields are required'
-            ]);
-            return;
-        }
-
-        if ($data['password'] !== $data['password_confirmation']) {
-            $this->render('auth/register', [
-                'error' => 'Passwords do not match'
-            ]);
-            return;
-        }
-
-        // Hash password
-        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-
-        
-        if (!$this->user->create($data)) {
-            $this->render('auth/register', [
-                'error' => 'Registration failed'
-            ]);
-            return;
-        }
-
-        // Redirect to login
-        $this->redirect('auth/login');
+   public function store()
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        $this->redirect('auth/register');
     }
+
+    $data = [
+        'name'     => trim($_POST['name'] ?? ''),
+        'email'    => trim($_POST['email'] ?? ''),
+        'username' => trim($_POST['username'] ?? ''),
+        'password' => $_POST['password'] ?? '',
+        'password_confirmation' => $_POST['password_confirmation'] ?? '',
+    ];
+
+    // Validation
+    if (
+        empty($data['name']) ||
+        empty($data['email']) ||
+        empty($data['username']) ||
+        empty($data['password'])
+    ) {
+        $this->render('auth/register', [
+            'error' => 'All fields are required'
+        ]);
+        return;
+    }
+
+    if ($data['password'] !== $data['password_confirmation']) {
+        $this->render('auth/register', [
+            'error' => 'Passwords do not match'
+        ]);
+        return;
+    }
+
+    // 🔐 Hash password
+    $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+
+    // ✅ SET DEFAULT ROLE = CLIENT
+    $data['role_id'] = 3;   // <-- IMPORTANT
+    $data['status']  = 'Active';
+
+    if (!$this->user->create($data)) {
+        $this->render('auth/register', [
+            'error' => 'Registration failed'
+        ]);
+        return;
+    }
+
+    $this->render('auth/login', [
+        'success' => 'Registration successful. Please login.'
+    ]);
+}
+
 
     // Show forgot password page
 public function forgot() {

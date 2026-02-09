@@ -74,7 +74,20 @@ public function create(array $data): bool {
     );
 
     return $stmt->execute();
+}public function markReadyForReview($projectId)
+{
+    $projectId = (int)$projectId;
+
+    $sql = "
+        UPDATE projects
+        SET status = 'Ready for Review'
+        WHERE id = $projectId
+    ";
+
+    return $this->db->query($sql);
 }
+
+
 
 // Fetch users by role name (Client or Agent)
 public function getByRoleName(string $roleName): array {
@@ -196,7 +209,105 @@ public function countByAgent(int $agentId): int
         return $this->db->fetchAll($sql);
     }
 
+public function getByClient($clientId)
+{
+    $clientId = (int)$clientId;
 
+    $result = $this->db->query(
+        "SELECT * FROM projects 
+         WHERE client_id = $clientId 
+         ORDER BY start_date DESC"
+    );
+
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
+public function getAllWithClientAgent()
+    {
+        $sql = "
+            SELECT 
+                p.id,
+                p.name,
+                p.start_date,
+                p.end_date,
+                p.status,
+
+                c.name AS client_name,
+                a.name AS agent_name
+
+            FROM projects p
+
+            LEFT JOIN users c 
+                ON p.client_id = c.id
+
+            LEFT JOIN users a 
+                ON p.agent_id = a.id
+
+            ORDER BY p.created_at DESC
+        ";
+
+        return $this->db->fetchAll($sql);
+    }
+
+
+public function countByClient($clientId)
+{
+    $clientId = (int)$clientId;
+
+    $result = $this->db->query(
+        "SELECT COUNT(*) AS total FROM projects WHERE client_id = $clientId"
+    );
+
+    $row = $result->fetch_assoc();
+    return $row['total'] ?? 0;
+}
+
+
+
+public function countByClientAndStatus($clientId, $status)
+{
+    $clientId = (int)$clientId;
+
+    // whitelist allowed statuses
+    $allowed = ['Pending', 'Active', 'Completed', 'On Hold', 'In Progress'];
+
+    if (!in_array($status, $allowed)) {
+        return 0;
+    }
+
+    $result = $this->db->query(
+        "SELECT COUNT(*) AS total 
+         FROM projects 
+         WHERE client_id = $clientId 
+         AND status = '$status'"
+    );
+
+    $row = $result->fetch_assoc();
+    return $row['total'] ?? 0;
+}
+
+
+
+public function assignToAgent($projectId, $agentId)
+{
+    return $this->db->query(
+        "UPDATE projects SET agent_id = ?, status = 'Assigned' WHERE id = ?",
+        [$agentId, $projectId]
+    );
+}
+
+
+public function markCompleted($projectId, $adminId)
+{
+    return $this->db->query(
+        "UPDATE projects
+         SET status = 'Completed',
+             verified_by = ?,
+             completed_at = NOW()
+         WHERE id = ?",
+        [$adminId, $projectId]
+    );
+}
 
 
 

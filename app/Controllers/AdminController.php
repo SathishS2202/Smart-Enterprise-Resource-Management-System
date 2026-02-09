@@ -184,11 +184,14 @@ public function usersDelete()
     ];
     $this->redirect('admin/users');
 }
-public function projects() {
-        $projects = $this->projectModel->getAllWithClientsAndAgents();
-        $agents = $this->projectModel->getAgents(); // for assign dropdown
-        $this->render('admin/projects/index', compact('projects','agents'));
-    }
+public function projects()
+{
+    $projects = $this->projectModel->getAllWithClientAgent();
+    $agents   = $this->userModel->getAllAgents(); // ✅ ALL agents
+
+    $this->render('admin/projects/index', compact('projects', 'agents'));
+}
+
 
     // Show create form
     public function projectsCreate() {
@@ -570,6 +573,8 @@ public function profile()
     exit;
 }
 
+
+
 public function changePassword()
 {
 
@@ -613,6 +618,30 @@ public function changePassword()
 
     $this->render('admin/profile/change_password');
 }
+public function approveProject()
+{
+    $projectId = $_POST['project_id'] ?? null;
+    $adminId   = $_SESSION['user_id'];
+
+    if ($projectId) {
+        $this->projectModel->markCompleted($projectId, $adminId);
+        $success = "Project approved & completed";
+    } else {
+        $error = "Invalid project";
+    }
+
+    $projects = $this->projectModel->getAllWithRelations();
+    $agents   = $this->userModel->getAgents();
+
+    $this->render('admin/projects/index', compact(
+        'projects',
+        'agents',
+        'success',
+        'error'
+    ));
+}
+
+
 
 }
 

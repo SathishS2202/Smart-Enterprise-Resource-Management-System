@@ -74,25 +74,29 @@
                             <td><?= htmlspecialchars($project['end_date'] ?? '-') ?></td>
                            <td>
 <td class="text-center">
-<?php
-switch($project['status'] ?? 'Pending') {
-    case 'Pending':
-        echo "<span class='badge bg-warning text-dark py-1 px-2 fs-6 d-inline-block text-center mt-2'>Pending</span>";
-        break;
-    case 'In Progress':
-        echo "<span class='badge bg-primary text-white py-1 px-2 fs-6 d-inline-block text-center mt-2'>In Progress</span>";
-        break;
-    case 'Completed':
-        echo "<span class='badge bg-success text-white py-1 px-2 fs-6 d-inline-block text-center mt-2'>Completed</span>";
-        break;
-    case 'On Hold':
-        echo "<span class='badge bg-secondary text-white py-1 px-2 fs-6 d-inline-block text-center mt-2'>On Hold</span>";
-        break;
-    default:
-        echo "<span class='badge bg-light text-dark py-1 px-2 fs-6 d-inline-block text-center mt-1'>Unknown</span>";
-}
-?>
+
+<?php if ($project['status'] === 'Pending'): ?>
+    <!-- Assign Agent -->
+    <span class="badge bg-warning">Pending</span>
+
+<?php elseif ($project['status'] === 'Assigned'): ?>
+    <span class="badge bg-primary">Assigned</span>
+
+<?php elseif ($project['status'] === 'Ready for Review'): ?>
+    <form method="post" action="<?= BASE_URL ?>/admin/approveProject" class="d-inline">
+        <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
+        <button class="btn btn-sm btn-success">
+            <i class="bi bi-check-circle"></i> Approve
+        </button>
+    </form>
+
+<?php elseif ($project['status'] === 'Completed'): ?>
+    <span class="badge bg-success">Completed</span>
+
+<?php endif; ?>
+
 </td>
+
 
 
 

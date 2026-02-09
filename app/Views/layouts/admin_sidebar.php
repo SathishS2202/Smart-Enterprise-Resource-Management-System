@@ -22,9 +22,7 @@
     <i class="bi bi-person-circle"></i>
     <span>My Profile</span>
 </a>
-<a href="<?= BASE_URL ?>/admin/logout" class="btn btn-sm btn-outline-danger">
+<a href="<?= BASE_URL ?>/admin/logout" >
     <i class="bi bi-box-arrow-right"></i> Logout
 </a>
-
-
 </div>

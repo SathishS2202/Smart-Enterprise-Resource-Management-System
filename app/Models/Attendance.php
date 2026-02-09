@@ -157,5 +157,89 @@ public function todayStatus(int $agentId): ?string
     $row = $stmt->get_result()->fetch_assoc();
     return $row['status'] ?? 'Not Marked';
 }
+public function markCheckOut($agentId)
+    {
+        $sql = "
+            UPDATE attendance
+            SET check_out = NOW()
+            WHERE agent_id = ? AND date = CURDATE()
+        ";
+        return $this->db->execute($sql, [$agentId]);
+    }
+
+     public function getByAgent($agentId)
+    {
+        $sql = "
+            SELECT *
+            FROM attendance
+            WHERE user_id = $agentId
+            ORDER BY date DESC
+        ";
+
+        return $this->db->fetchAll($sql);
+    }
+
+    // Get today's attendance (check-in / check-out status)
+    public function todayAttendance($agentId)
+    {
+        $today = date('Y-m-d');
+
+        $sql = "
+            SELECT *
+            FROM attendance
+            WHERE user_id = $agentId
+            AND date = '$today'
+            LIMIT 1
+        ";
+
+        return $this->db->fetch($sql);
+    }
+
+    // Check-in
+   public function checkIn(int $userId): bool
+{
+    $today = date('Y-m-d');
+
+    // Check if already marked
+    $existing = $this->db->fetch(
+        "SELECT id FROM attendance WHERE user_id = $userId AND date = '$today'"
+    );
+
+    if ($existing) {
+        return false; // already checked in
+    }
+
+    return $this->db->query(
+        "INSERT INTO attendance (user_id, date, status)
+         VALUES ($userId, '$today', 'Present')"
+    );
+}
+
+
+    // Check-out
+    public function checkOut($agentId)
+    {
+        $time = date('H:i:s');
+
+        $sql = "
+            UPDATE attendance
+            SET check_out = '$time'
+            WHERE user_id = $agentId
+            AND date = CURDATE()
+        ";
+
+        return $this->db->query($sql);
+    }
+   public function summaryByAgent(int $agentId): array
+{
+    return $this->db->fetchAll("
+        SELECT status, COUNT(*) AS total
+        FROM attendance
+        WHERE user_id = $agentId
+        GROUP BY status
+    ");
+}
+
+ 
 
 }

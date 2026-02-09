@@ -213,6 +213,18 @@ public function countPendingByAgent(int $agentId): int
         $row = $this->db->fetch("SELECT COUNT(*) AS total FROM tasks WHERE project_id = $projectId AND status='$status'");
         return $row['total'] ?? 0;
     }
+
+    public function markCompleted($taskId, $agentId)
+    {
+        return $this->db->query(
+            "UPDATE tasks SET status='Completed' WHERE id=? AND agent_id=?",
+            [$taskId, $agentId]
+        );
+    }
+   
+
+    
+    
 }
 
 

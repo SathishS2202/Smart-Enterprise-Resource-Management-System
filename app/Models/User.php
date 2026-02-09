@@ -283,6 +283,27 @@ public function countPerAgent()
         'data'   => $data
     ];
 }
+public function findByIdWithRole(int $id)
+{
+    return $this->db->fetch("
+        SELECT u.*, r.role_name
+        FROM users u
+        JOIN roles r ON r.id = u.role_id
+        WHERE u.id = $id
+        LIMIT 1
+    ");
+}
+public function getAllAgents()
+{
+    return $this->db->fetchAll("
+        SELECT id, name
+        FROM users
+        WHERE role_id = 2
+          AND status = 'Active'
+        ORDER BY name ASC
+    ");
+}
+
 
 
 
