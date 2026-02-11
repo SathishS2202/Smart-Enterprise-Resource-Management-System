@@ -305,6 +305,17 @@ public function getAllAgents()
 }
 
 
+public function getAgents()
+{
+    $sql = "SELECT u.*, r.role_name
+            FROM users u
+            JOIN roles r ON u.role_id = r.id
+            WHERE r.role_name = 'Agent' AND u.status = 'active'";
+
+    $result = $this->db->query($sql);
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
+
 
 
 // User.php
@@ -373,6 +384,30 @@ public function findById(int $id): array|null
 
     return $stmt->get_result()->fetch_assoc();
 }
+
+public function updateProfile($id, $data)
+{
+    $name  = $data['name'] ?? '';
+    $email = $data['email'] ?? '';
+
+    $conn = $this->db->conn; // Assuming your Database class exposes the mysqli connection as $conn
+
+    $stmt = $conn->prepare("UPDATE users SET name = ?, email = ? WHERE id = ?");
+    $stmt->bind_param("ssi", $name, $email, $id);
+    return $stmt->execute();
+}
+public function getAllUsers()
+{
+    $stmt = $this->db->query("
+        SELECT users.id, users.name, users.email, users.username, users.status,
+               roles.role_name
+        FROM users
+        JOIN roles ON users.role_id = roles.id
+        ORDER BY users.id DESC
+    ");
+    return $stmt->fetch_all(MYSQLI_ASSOC);
+}
+
 
 
 

@@ -221,7 +221,86 @@ public function countPendingByAgent(int $agentId): int
             [$taskId, $agentId]
         );
     }
-   
+    
+ 
+public function getByClient($clientId)
+{
+    $clientId = (int)$clientId; // 🔐 safety
+
+    $sql = "
+        SELECT 
+            t.*,
+            p.name AS project_name,
+            u.name AS agent_name
+        FROM tasks t
+        JOIN projects p ON p.id = t.project_id
+        LEFT JOIN users u ON u.id = t.assigned_to
+        WHERE p.client_id = $clientId
+        ORDER BY t.id DESC
+    ";
+
+    return $this->db->query($sql);
+}
+public function countByClient($clientId)
+{
+    $sql = "
+        SELECT COUNT(t.id) AS total
+        FROM tasks t
+        JOIN projects p ON p.id = t.project_id
+        WHERE p.client_id = $clientId
+    ";
+
+    $result = $this->db->query($sql)->fetch_assoc();
+    return $result['total'] ?? 0;
+}
+
+public function countByClientAndStatus($clientId, $status)
+{
+    $status = mysqli_real_escape_string($this->db->conn, $status);
+
+    $sql = "
+        SELECT COUNT(t.id) AS total
+        FROM tasks t
+        JOIN projects p ON p.id = t.project_id
+        WHERE p.client_id = $clientId
+        AND t.status = '$status'
+    ";
+
+    $result = $this->db->query($sql)->fetch_assoc();
+    return $result['total'] ?? 0;
+}
+
+
+public function getAllTasks()
+{
+    $stmt = $this->db->query("
+        SELECT 
+            tasks.id,
+            tasks.title,
+            tasks.project_id,
+            projects.name AS project_name,  -- from projects table
+            tasks.assigned_to,
+            users.name AS agent_name,       -- join agent's name
+            tasks.status,
+            tasks.start_date,
+            tasks.due_date,
+            tasks.created_at,
+            tasks.updated_at
+        FROM tasks
+        LEFT JOIN projects ON tasks.project_id = projects.id
+        LEFT JOIN users ON tasks.assigned_to = users.id
+        ORDER BY tasks.id DESC
+    ");
+
+    return $stmt->fetch_all(MYSQLI_ASSOC);
+}
+
+
+
+
+
+
+
 
     
     

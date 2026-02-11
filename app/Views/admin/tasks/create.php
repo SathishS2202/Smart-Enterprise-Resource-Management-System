@@ -1,7 +1,7 @@
 <?php require_once __DIR__.'/../../layouts/admin_header.php'; ?>
 <?php require_once __DIR__.'/../../layouts/admin_sidebar.php'; ?>
 
-<div class="container-fluid px-4 pt-3">
+<div class="container-fluid px-4 pt-3" style="background-color: #f8f9fa; min-height: 85vh;">
     <h4>Add New Task</h4>
 
     <form method="post" action="<?= BASE_URL ?>/admin/tasksStore">
@@ -38,6 +38,7 @@
         <div class="mb-3">
             <label>Due Date</label>
             <input type="date" name="due_date" class="form-control">
+
         </div>
 
         <div class="mb-3">

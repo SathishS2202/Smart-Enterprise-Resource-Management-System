@@ -1,36 +1,30 @@
 <?php
 namespace App\Controllers;
 
+use Core\Controller;
+use Core\Auth;
+use App\Models\User;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use Core\Auth;
 
-use Core\Controller;
-use App\Models\User;
-
-
-class AuthController extends Controller {
-
+class AuthController extends Controller
+{
     private $user;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->user = new User();
     }
 
-    // Show login page
-   public function login() {
+    /* =================== LOGIN =================== */
+    public function login()
+    {
+        Auth::redirectIfLoggedIn();
+        $this->render('auth/login', ['title' => 'Login']);
+    }
 
-    // 🚫 If already logged in, kick them out of login page
-    Auth::redirectIfLoggedIn();
-
-    $this->render('auth/login', [
-        'title' => 'Login'
-    ]);
-}
-
-    // Handle login POST
-    public function authenticate() {
-
+    public function authenticate()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $this->redirect('auth/login');
         }
@@ -41,201 +35,200 @@ class AuthController extends Controller {
         $user = $this->user->findByUsername($username);
 
         if (!$user || !password_verify($password, $user['password'])) {
-            $this->render('auth/login', [
-                'error' => 'Invalid username or password'
-            ]);
+            $this->render('auth/login', ['error' => 'Invalid username or password']);
             return;
         }
 
-        // ✅ LOGIN SUCCESS
-        $_SESSION['user_id']   = $user['id'];
-        $_SESSION['username']  = $user['username'];
-        $_SESSION['role']      = $user['role_name'];
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['role'] = $user['role_name'];
 
         // Role-based redirect
-       switch ($user['role_name']) {
-    case 'Admin':
-        $this->redirect('admin/dashboard');
-        break;
-
-    case 'Agent':
-        $this->redirect('agent/dashboard');
-        break;
-
-    case 'Client':
-        $this->redirect('client/dashboard');
-        break;
-
-    default:
-        session_destroy();
-        $this->redirect('auth/login');
-}
-
+        switch ($user['role_name']) {
+            case 'Admin':
+                $this->redirect('admin/dashboard');
+                break;
+            case 'Agent':
+                $this->redirect('agent/dashboard');
+                break;
+            case 'Client':
+                $this->redirect('client/dashboard');
+                break;
+            default:
+                session_destroy();
+                $this->redirect('auth/login');
+        }
     }
 
-    // Logout
-    public function logout() {
+    public function logout()
+    {
         session_destroy();
         $this->redirect('auth/login');
     }
 
-    // Show register page
-    public function register() {
-        $this->render('auth/register', [
-            'title' => 'Register'
-        ]);
+    /* =================== REGISTER =================== */
+    public function register()
+    {
+        $this->render('auth/register', ['title' => 'Register']);
     }
 
-    // Handle register POST
-   public function store()
+    public function store()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('auth/register');
+        }
+
+        $data = [
+            'name' => trim($_POST['name'] ?? ''),
+            'email' => trim($_POST['email'] ?? ''),
+            'username' => trim($_POST['username'] ?? ''),
+            'password' => $_POST['password'] ?? '',
+            'password_confirmation' => $_POST['password_confirmation'] ?? '',
+        ];
+
+        if (empty($data['name']) || empty($data['email']) || empty($data['username']) || empty($data['password'])) {
+            $this->render('auth/register', ['error' => 'All fields are required']);
+            return;
+        }
+
+        if ($data['password'] !== $data['password_confirmation']) {
+            $this->render('auth/register', ['error' => 'Passwords do not match']);
+            return;
+        }
+
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        $data['role_id'] = 3; // Default role = Client
+        $data['status'] = 'Active';
+
+        if (!$this->user->create($data)) {
+            $this->render('auth/register', ['error' => 'Registration failed']);
+            return;
+        }
+
+        $this->render('auth/login', ['success' => 'Registration successful. Please login.']);
+    }
+
+    /* =================== FORGOT PASSWORD =================== */
+    public function forgot()
+    {
+        $this->render('auth/forgot', ['title' => 'Forgot Password']);
+    }
+
+
+    public function sendResetLink()
 {
+    // Only handle POST requests
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        $this->redirect('auth/register');
+        $this->redirect('auth/forgot');
     }
 
-    $data = [
-        'name'     => trim($_POST['name'] ?? ''),
-        'email'    => trim($_POST['email'] ?? ''),
-        'username' => trim($_POST['username'] ?? ''),
-        'password' => $_POST['password'] ?? '',
-        'password_confirmation' => $_POST['password_confirmation'] ?? '',
-    ];
-
-    // Validation
-    if (
-        empty($data['name']) ||
-        empty($data['email']) ||
-        empty($data['username']) ||
-        empty($data['password'])
-    ) {
-        $this->render('auth/register', [
-            'error' => 'All fields are required'
-        ]);
-        return;
-    }
-
-    if ($data['password'] !== $data['password_confirmation']) {
-        $this->render('auth/register', [
-            'error' => 'Passwords do not match'
-        ]);
-        return;
-    }
-
-    // 🔐 Hash password
-    $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-
-    // ✅ SET DEFAULT ROLE = CLIENT
-    $data['role_id'] = 3;   // <-- IMPORTANT
-    $data['status']  = 'Active';
-
-    if (!$this->user->create($data)) {
-        $this->render('auth/register', [
-            'error' => 'Registration failed'
-        ]);
-        return;
-    }
-
-    $this->render('auth/login', [
-        'success' => 'Registration successful. Please login.'
-    ]);
-}
-
-
-    // Show forgot password page
-public function forgot() {
-    $this->render('auth/forgot', ['title' => 'Forgot Password']);
-}
-
-
-
-public function sendResetLink() {
     $email = trim($_POST['email'] ?? '');
+    if (empty($email)) {
+        $this->render('auth/forgot', ['error' => 'Please enter your email']);
+        return;
+    }
+
     $user = $this->user->findByEmail($email);
     if (!$user) {
         $this->render('auth/forgot', ['error' => 'Email not found']);
         return;
     }
 
+    // Generate a secure token and expiry
     $token = bin2hex(random_bytes(16));
     $expires = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+    // Save token in DB
     $this->user->createPasswordResetToken($user['id'], $token, $expires);
 
-    // Detect current protocol and host dynamically
-$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-$host = $_SERVER['HTTP_HOST']; // localhost, serms.local, or live domain
-$baseUrl = $protocol . $host . "/serms"; // adjust "/serms" to your project folder if different
+    // Build reset link for localhost
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https://" : "http://";
+    $host = $_SERVER['HTTP_HOST']; // e.g., localhost
+    $baseUrl = $protocol . $host . "/serms/public"; // adjust if your project folder is different
 
-$resetLink = $baseUrl . "/index.php?url=auth/reset&token=$token";
+    // Important: use index.php?url=auth/reset&token=... for your router
+    $resetLink = $baseUrl . "/index.php?url=auth/reset&token=" . $token;
 
-
-
+    // Send email using PHPMailer
     $mail = new PHPMailer(true);
 
     try {
         // Server settings
         $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';   // e.g., Gmail SMTP
+        $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username = 'sathishs2202@gmail.com';
-    $mail->Password = 'iegaktnuladdhjsm';
+         $mail->Username = 'sathishs2202@gmail.com';
+            $mail->Password = 'iegaktnuladdhjsm'; 
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
         // Recipients
-        $mail->setFrom('sathishs2202@gmail.com', 'SERMS');
+         $mail->setFrom('sathishs2202@gmail.com', 'SERMS');
         $mail->addAddress($email, $user['name']);
 
         // Content
         $mail->isHTML(true);
         $mail->Subject = 'Password Reset Request';
-        $mail->Body    = "Click the link to reset your password: <a href='$resetLink'>$resetLink</a>";
+        $mail->Body    = "
+            <p>Hello {$user['name']},</p>
+            <p>You requested a password reset. Click the link below to reset your password:</p>
+            <p><a href='{$resetLink}'>Reset Password</a></p>
+            <p>If you did not request this, you can safely ignore this email.</p>
+        ";
 
         $mail->send();
-        $this->render('auth/forgot', ['success' => 'Reset link sent to your email']);
-    } catch (Exception $e) {
-        $this->render('auth/forgot', ['error' => "Email could not be sent. Mailer Error: {$mail->ErrorInfo}"]);
+
+        $this->render('auth/forgot', [
+            'success' => 'Reset link sent successfully. Check your email.'
+        ]);
+
+    } catch (\PHPMailer\PHPMailer\Exception $e) {
+        $this->render('auth/forgot', [
+            'error' => "Email could not be sent. Mailer Error: {$mail->ErrorInfo}"
+        ]);
     }
 }
 
-// Show reset form
-public function reset() {
-    $token = $_GET['token'] ?? '';
-    if (!$token) {
+
+    
+    /* =================== RESET PASSWORD =================== */
+    public function reset()
+    {
+        $token = $_GET['token'] ?? '';
+        if (!$token) {
+            $this->redirect('auth/login');
+        }
+
+        $this->render('auth/reset', ['token' => $token]);
+    }
+
+    public function updatePassword()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('auth/login');
+        }
+
+        $token = $_POST['token'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $password_confirm = $_POST['password_confirm'] ?? '';
+
+        if (empty($password) || $password !== $password_confirm) {
+            $this->render('auth/reset', ['error' => 'Passwords do not match', 'token' => $token]);
+            return;
+        }
+
+        $reset = $this->user->getPasswordResetByToken($token);
+
+        if (!$reset || strtotime($reset['expires_at']) < time()) {
+            $this->render('auth/reset', ['error' => 'Invalid or expired token']);
+            return;
+        }
+
+        $hashed = password_hash($password, PASSWORD_DEFAULT);
+        $this->user->updatePassword($reset['user_id'], $hashed);
+
+        $this->user->deletePasswordResetToken($token);
+
         $this->redirect('auth/login');
     }
-
-    $this->render('auth/reset', ['token' => $token]);
-}
-
-// Handle reset POST
-public function updatePassword() {
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        $this->redirect('auth/login');
-    }
-
-    $token = $_POST['token'] ?? '';
-    $password = $_POST['password'] ?? '';
-    $password_confirm = $_POST['password_confirm'] ?? '';
-
-    if (empty($password) || $password !== $password_confirm) {
-        $this->render('auth/reset', ['error' => 'Passwords do not match', 'token' => $token]);
-        return;
-    }
-
-    $reset = $this->user->getPasswordResetByToken($token);
-    if (!$reset || strtotime($reset['expires_at']) < time()) {
-        $this->render('auth/reset', ['error' => 'Invalid or expired token']);
-        return;
-    }
-
-    $hashed = password_hash($password, PASSWORD_DEFAULT);
-    $this->user->updatePassword($reset['user_id'], $hashed);
-
-    // Delete token after use
-    $this->user->deletePasswordResetToken($token);
-
-    $this->redirect('auth/login');
-}
-
-
 }

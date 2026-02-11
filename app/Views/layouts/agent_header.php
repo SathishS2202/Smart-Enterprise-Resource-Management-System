@@ -13,23 +13,39 @@
 </head>
 <body>
 
-<div class="header d-flex justify-content-between align-items-center">
+<div class="header d-flex justify-content-between align-items-center p-2 shadow-sm bg-white">
+
     <div class="d-flex align-items-center gap-3">
-        <h4 class="mb-0">Agent Panel</h4>
+        <!-- Panel Title -->
+        <h4 class="mb-0">
+            <?php
+            if(isset($_SESSION['impersonate_role']) && $_SESSION['impersonate_role'] === 'agent') {
+                echo "Agent Panel (Impersonated)";
+            } else {
+                echo "Agent Panel";
+            }
+            ?>
+        </h4>
 
-        <!-- Optional: Switch Role (if needed) -->
-        <div class="role-switch">
-            <i class="bi bi-person-lines-fill"></i>
-            <select onchange="location.href=this.value" class="form-select form-select-sm">
-                <option selected disabled>Switch Role</option>
-                <option value="<?= BASE_URL ?>/admin/dashboard">Admin View</option>
-                <option value="<?= BASE_URL ?>/client/dashboard">Client View</option>
-            </select>
-        </div>
+        <!-- Role Switch Dropdown -->
+        <?php if($_SESSION['role'] === 'admin'): ?>
+            <div class="role-switch">
+                <i class="bi bi-person-lines-fill"></i>
+                <select onchange="location.href=this.value" class="form-select form-select-sm">
+                    <option selected disabled>Switch Role</option>
+                    <option value="<?= BASE_URL ?>/admin/dashboard">Admin View</option>
+                    <option value="<?= BASE_URL ?>/agent/dashboard">Agent View</option>
+                    <option value="<?= BASE_URL ?>/client/dashboard">Client View</option>
+                </select>
+            </div>
+            <span class="badge bg-warning text-dark ms-2">Admin Viewing</span>
+        <?php endif; ?>
     </div>
 
-    <div class="header-right">
-        <i class="bi bi-bell"></i>
-        <?= htmlspecialchars($_SESSION['username'] ?? 'Agent') ?>
+    <!-- Header Right: Notifications + Username -->
+    <div class="header-right d-flex align-items-center gap-2">
+        <i class="bi bi-bell fs-5"></i>
+        <span><?= htmlspecialchars($_SESSION['username'] ?? 'Agent') ?></span>
     </div>
+
 </div>

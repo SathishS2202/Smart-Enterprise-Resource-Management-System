@@ -74,7 +74,9 @@ public function create(array $data): bool {
     );
 
     return $stmt->execute();
-}public function markReadyForReview($projectId)
+}
+
+public function markReadyForReview($projectId)
 {
     $projectId = (int)$projectId;
 
@@ -213,14 +215,28 @@ public function getByClient($clientId)
 {
     $clientId = (int)$clientId;
 
-    $result = $this->db->query(
-        "SELECT * FROM projects 
-         WHERE client_id = $clientId 
-         ORDER BY start_date DESC"
-    );
+    $sql = "
+        SELECT 
+            p.*,
+            u.name AS agent_name
+        FROM projects p
+        LEFT JOIN users u ON u.id = p.agent_id
+        WHERE p.client_id = $clientId
+        ORDER BY p.id DESC
+    ";
 
-    return $result->fetch_all(MYSQLI_ASSOC);
+    $result = $this->db->query($sql);
+
+    $projects = [];
+    while ($row = $result->fetch_assoc()) {
+        $projects[] = $row;
+    }
+
+    return $projects;
 }
+
+
+
 
 public function getAllWithClientAgent()
     {
@@ -288,26 +304,68 @@ public function countByClientAndStatus($clientId, $status)
 
 
 
-public function assignToAgent($projectId, $agentId)
+public function assignToAgent(int $projectId, int $agentId): bool
 {
-    return $this->db->query(
-        "UPDATE projects SET agent_id = ?, status = 'Assigned' WHERE id = ?",
-        [$agentId, $projectId]
+    $stmt = $this->db->conn->prepare(
+        "UPDATE projects SET agent_id = ?, status = 'Assigned' WHERE id = ?"
     );
+    $stmt->bind_param("ii", $agentId, $projectId);
+    return $stmt->execute();
 }
+
 
 
 public function markCompleted($projectId, $adminId)
 {
-    return $this->db->query(
-        "UPDATE projects
-         SET status = 'Completed',
-             verified_by = ?,
-             completed_at = NOW()
-         WHERE id = ?",
-        [$adminId, $projectId]
-    );
+    // Make sure values are safe
+    $projectId = (int) $projectId;
+    $status = 'Completed';
+
+    // Simple SQL without ?
+    $sql = "UPDATE projects 
+            SET status = '$status', completed_by = $adminId, completed_at = NOW() 
+            WHERE id = $projectId";
+
+    return $this->db->query($sql);
 }
+public function getAllWithRelations(): array
+{
+    $sql = "
+        SELECT 
+            p.*,
+            c.name AS client_name,
+            a.name AS agent_name
+        FROM projects p
+        LEFT JOIN users c ON c.id = p.client_id
+        LEFT JOIN users a ON a.id = p.agent_id
+        ORDER BY p.created_at DESC
+    ";
+
+    $result = $this->db->conn->query($sql); // Use conn->query
+    return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+}
+public function getAllProjects()
+{
+    $stmt = $this->db->query("
+        SELECT 
+            projects.id,
+            projects.name AS title,  
+            projects.client_id,
+            clients.name AS client_name,
+            projects.status,
+            projects.start_date,
+            projects.end_date,
+            projects.agent_id,
+            projects.completed_by,
+            projects.completed_at
+        FROM projects
+        LEFT JOIN users AS clients ON projects.client_id = clients.id
+        ORDER BY projects.id DESC
+    ");
+    
+    return $stmt->fetch_all(MYSQLI_ASSOC);
+}
+
 
 
 

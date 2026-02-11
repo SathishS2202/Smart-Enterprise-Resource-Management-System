@@ -31,11 +31,12 @@
                             </span>
                         </td>
 
-                        <td>
-                            <?= $project['completed_tasks'] ?>
-                            /
-                            <?= $project['total_tasks'] ?>
-                        </td>
+                       <td>
+    <?= $project['completed_tasks'] ?? 0 ?>
+    /
+    <?= $project['total_tasks'] ?? 0 ?>
+</td>
+
 
                         <td>
                             <?php if ($project['status'] === 'In Progress'): ?>

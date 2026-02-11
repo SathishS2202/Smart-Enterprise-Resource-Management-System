@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\Attendance;
 use App\Models\User;
 use App\Models\Project;
+use App\Models\Leave; 
 
 class AgentController extends Controller
 {
@@ -14,6 +15,7 @@ class AgentController extends Controller
     protected $attendanceModel;
     protected $userModel;
     protected $projectModel;
+    protected $leaveModel;
 
     public function __construct()
     {
@@ -21,16 +23,20 @@ class AgentController extends Controller
             session_start();
         }
 
-        // Only Agents allowed
-        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Agent') {
-            header('Location: ' . BASE_URL . '/auth/login');
-            exit;
-        }
+    $role = $_SESSION['impersonate_role'] ?? $_SESSION['role'];
+if ($role !== 'Agent' && $_SESSION['role'] !== 'Admin') {
+    header('Location: ' . BASE_URL . '/auth/login');
+    exit;
+}
+$this->userId= $_SESSION['user_id'];
+
+
 
         $this->taskModel       = new Task();
         $this->attendanceModel = new Attendance();
         $this->userModel       = new User();
         $this->projectModel    = new Project();
+        $this->leaveModel      = new Leave();
     }
 
     /* ======================
@@ -238,6 +244,8 @@ public function changePassword()
 }
 public function submitForReview()
 {
+    $success = null;
+     $error   = null;
     $projectId = $_POST['project_id'] ?? null;
 
     if ($projectId) {
@@ -252,6 +260,71 @@ public function submitForReview()
 
     $this->render('agent/projects/index', compact('projects', 'success', 'error'));
 }
+
+public function markTaskDone2($taskId)
+{
+    if (empty($taskId)) {
+        header("Location: " . BASE_URL . "/agent/tasks");
+        exit;
+    }
+
+    $this->taskModel->updateStatus($taskId, 'Completed');
+
+    $_SESSION['task_msg'] = [
+        'type' => 'success',
+        'text' => 'Task marked as completed'
+    ];
+
+    header("Location: " . BASE_URL . "/agent/tasks");
+    exit;
+}
+
+public function markTaskDone()
+{
+    $taskId = $_POST['task_id'] ?? null;
+
+    if (!$taskId) {
+        header("Location: " . BASE_URL . "/agent/tasks");
+        exit;
+    }
+
+    $this->taskModel->updateStatus($taskId, 'Completed');
+
+    $_SESSION['task_msg'] = [
+        'type' => 'success',
+        'text' => 'Task marked as completed'
+    ];
+
+    header("Location: " . BASE_URL . "/agent/tasks");
+    exit;
+}
+// Display leave requests submitted by this agent
+public function leaveRequests()
+{
+    $userId = $_SESSION['user_id'];
+    $leaves = $this->leaveModel->getByUser($userId);
+    $this->render('agent/leaves/index', compact('leaves'));
+}
+
+// Submit new leave
+public function leaveSubmit()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $data = [
+            'user_id'    => $_SESSION['user_id'],
+            'start_date' => $_POST['start_date'],
+            'end_date'   => $_POST['end_date'],
+            'reason'     => $_POST['reason']
+        ];
+
+        $this->leaveModel->create($data);
+        header('Location: ' . BASE_URL . '/agent/leaveRequests');
+        exit;
+    }
+
+    $this->render('agent/leaves/create');
+}
+
 
 
 

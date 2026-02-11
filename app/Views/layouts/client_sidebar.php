@@ -36,7 +36,7 @@
     </li>
 
     <li class="nav-item mt-3">
-        <a href="<?= BASE_URL ?>/client/logout" class="btn btn-sm btn-outline-danger w-100">
+        <a href="<?= BASE_URL ?>/client/logout" >
             <i class="bi bi-box-arrow-right"></i>
             Logout
         </a>

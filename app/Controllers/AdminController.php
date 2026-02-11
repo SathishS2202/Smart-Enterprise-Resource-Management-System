@@ -5,11 +5,14 @@ use Core\Controller;
 use Core\Auth;
 use App\Models\User;
 use App\Models\Project;
+use App\Services\MailService;
+
 use App\Models\Task;
 use App\Models\Leave;
 use App\Models\RequestModel;
 use App\Models\Attendance;
 use App\Models\Document;
+use App\Models\Notification;
 use App\Models\ReportModels;
 
 class AdminController extends Controller
@@ -34,6 +37,7 @@ class AdminController extends Controller
         $this->requestModel = new RequestModel();
         $this->attendanceModel = new Attendance();
         $this->documentModel = new Document();
+
 
     }
 
@@ -75,6 +79,89 @@ class AdminController extends Controller
     $users = $this->userModel->getAllWithRoles();
     $this->render('admin/users/index', compact('users'));
 }
+// In AdminController.php
+
+// Example in AdminController.php
+// AdminController.php
+public function switchRole($role)
+{
+    // Only Admin can switch roles
+    if ($_SESSION['role'] !== 'admin') {
+        header("Location: " . BASE_URL);
+        exit;
+    }
+
+    // Allowed roles
+    $allowed = ['agent', 'client'];
+
+    if (!in_array($role, $allowed)) {
+        header("Location: " . BASE_URL . "/admin/dashboard");
+        exit;
+    }
+
+    // Set session variable for impersonation
+    $_SESSION['impersonate_role'] = $role;
+
+    // Set the user_id to impersonate (optional, for real agent/client)
+    if ($role === 'agent') {
+        // Example: switch to the first agent (you can customize)
+        $_SESSION['user_id'] = 1; 
+        $_SESSION['username'] = "Agent #1";
+        header("Location: " . BASE_URL . "/agent/dashboard");
+        exit;
+    }
+
+    if ($role === 'client') {
+        $_SESSION['user_id'] = 1;
+        $_SESSION['username'] = "Client #1";
+        header("Location: " . BASE_URL . "/client/dashboard");
+        exit;
+    }
+
+    header("Location: " . BASE_URL . "/admin/dashboard");
+}
+
+
+public function switchRoleAgent($agentId = null)
+{
+    // Only allow admin to switch roles
+    if ($_SESSION['role'] !== 'admin') {
+        header("Location: " . BASE_URL . "/admin/dashboard");
+        exit;
+    }
+
+    // Set session variable for impersonation
+    $_SESSION['impersonate_role'] = 'agent';
+
+    // Optionally, load the agent info
+    if ($agentId) {
+        $_SESSION['user_id'] = $agentId;       // act as this agent
+        $_SESSION['username'] = "Agent #$agentId"; // optional display
+    }
+
+    // Redirect to agent dashboard
+    header("Location: " . BASE_URL . "/agent/dashboard");
+    exit;
+}
+
+public function switchRoleClient($clientId = null)
+{
+    if ($_SESSION['role'] !== 'admin') {
+        header("Location: " . BASE_URL . "/admin/dashboard");
+        exit;
+    }
+
+    $_SESSION['impersonate_role'] = 'client';
+
+    if ($clientId) {
+        $_SESSION['user_id'] = $clientId;
+        $_SESSION['username'] = "Client #$clientId";
+    }
+
+    header("Location: " . BASE_URL . "/client/dashboard");
+    exit;
+}
+
 
     // /admin/usersCreate
     public function usersCreate()
@@ -207,8 +294,9 @@ public function projects()
                 'name' => $_POST['name'],
                 'description' => $_POST['description'] ?? '',
                 'client_id' => $_POST['client_id'],
-                'start_date' => $_POST['start_date'] ?? null,
-                'end_date' => $_POST['end_date'] ?? null,
+                'start_date' => !empty($_POST['start_date']) ? $_POST['start_date'] : null,
+'end_date'   => !empty($_POST['end_date']) ? $_POST['end_date'] : null,
+
                 'status' => $_POST['status'] ?? 'Pending',
             ];
 
@@ -299,19 +387,37 @@ public function tasksCreate() {
 }
 
 // Store Task
-public function tasksStore() {
+public function tasksStore()
+{
+    $due_date = $_POST['due_date'] ?? null;
+
+    if (!empty($due_date)) {
+        $due_date = date('Y-m-d', strtotime($due_date));
+    }
+
     $data = [
-        'project_id' => $_POST['project_id'],
-        'title' => $_POST['title'],
-        'description' => $_POST['description'],
+        'project_id'  => $_POST['project_id'],
+        'title'       => $_POST['title'],
+        'description' => $_POST['description'] ?? null,
         'assigned_to' => $_POST['assigned_to'] ?? null,
-        'start_date' => $_POST['start_date'] ?? null,
-        'due_date' => $_POST['due_date'] ?? null,
-        'status' => $_POST['status'] ?? 'Pending'
+        'start_date' => !empty($_POST['start_date']) ? $_POST['start_date'] : null,
+'end_date'   => !empty($_POST['end_date']) ? $_POST['end_date'] : null,
+
+        'status'      => $_POST['status'] ?? 'Pending'
     ];
+
+    // 🔍 TEMP DEBUG (REMOVE AFTER CHECK)
+    // var_dump($data['due_date']); exit;
+
     $this->taskModel->create($data);
-    $_SESSION['task_msg'] = ['type'=>'success','text'=>'Task created successfully!'];
+
+    $_SESSION['task_msg'] = [
+        'type' => 'success',
+        'text' => 'Task created successfully!'
+    ];
+
     header("Location: " . BASE_URL . "/admin/tasks");
+    exit;
 }
 
 // Edit Task Page
@@ -382,6 +488,44 @@ public function tasksAssignAgent() {
 }
 // List Attendance
 
+// Show Email Page
+public function email()
+{
+    require_once __DIR__ . '/../Views/admin/email/create.php';
+}
+
+
+// Handle Email Submit
+public function sendEmail()
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        return;
+    }
+
+    $to      = trim($_POST['to']);
+    $subject = trim($_POST['subject']);
+    $message = trim($_POST['message']);
+
+    $mailService = new MailService();
+
+    if ($mailService->send($to, $subject, $message)) {
+
+        $_SESSION['email_msg'] = [
+            'type' => 'success',
+            'text' => 'Email sent successfully'
+        ];
+
+    } else {
+
+        $_SESSION['email_msg'] = [
+            'type' => 'danger',
+            'text' => 'Email failed to send'
+        ];
+    }
+
+    header("Location: " . BASE_URL . "/admin/email");
+    exit;
+}
 
 
 // Add Attendance
@@ -514,38 +658,43 @@ public function documentView()
 public function reports()
 {
     // USERS
-    $totalUsers = $this->userModel->countAll();
-    $rolesData = $this->userModel->countByRoles();
-    $userGrowth = $this->userModel->weeklyGrowth();
+    $totalUsers   = $this->userModel->countAll();
+    $rolesData    = $this->userModel->countByRoles();
+    $userGrowth   = $this->userModel->weeklyGrowth();
+    $usersData    = $this->userModel->getAllUsers(); // <-- full users table
 
     // PROJECTS
-    $totalProjects = $this->projectModel->countAll();
-    $projectStatus = $this->projectModel->countByStatus();
-    $projectsPerAgent = $this->projectModel->countPerAgent();
+    $totalProjects   = $this->projectModel->countAll();
+    $projectStatus   = $this->projectModel->countByStatus();
+    $projectsPerAgent= $this->projectModel->countPerAgent();
+    $projectsData    = $this->projectModel->getAllProjects(); // <-- full projects table
 
     // TASKS
-    $totalTasks = $this->taskModel->countAll();
-    $taskStatus = $this->taskModel->countByStatus();
-   
+    $totalTasks  = $this->taskModel->countAll();
+    $taskStatus  = $this->taskModel->countByStatus();
+    $tasksData   = $this->taskModel->getAllTasks(); // <-- full tasks table
 
     // ATTENDANCE
-    $attendanceStats = $this->attendanceModel->presentVsAbsent();
+    $attendanceStats  = $this->attendanceModel->presentVsAbsent();
     $attendanceWeekly = $this->attendanceModel->weeklyAttendance();
 
     $this->render('admin/reports/index', compact(
-    'totalUsers',
-    'rolesData',
-    'userGrowth',
-    'totalProjects',
-    'projectStatus',
-    'projectsPerAgent',
-    'totalTasks',
-    'taskStatus',
-    'attendanceStats',
-    'attendanceWeekly'
-));
-
+        'totalUsers',
+        'rolesData',
+        'userGrowth',
+        'usersData',
+        'totalProjects',
+        'projectStatus',
+        'projectsPerAgent',
+        'projectsData',
+        'totalTasks',
+        'taskStatus',
+        'tasksData',
+        'attendanceStats',
+        'attendanceWeekly'
+    ));
 }
+
 public function profile()
     {
         if (!isset($_SESSION['user_id'])) {
@@ -620,6 +769,7 @@ public function changePassword()
 }
 public function approveProject()
 {
+      $error = null;   
     $projectId = $_POST['project_id'] ?? null;
     $adminId   = $_SESSION['user_id'];
 
@@ -640,6 +790,59 @@ public function approveProject()
         'error'
     ));
 }
+// View all leave requests
+public function leave_approvals()
+{
+    $this->leaveModel = new \App\Models\Leave();
+
+    $leaves = $this->leaveModel->getByStatus('Pending');
+
+    $this->render('admin/leaves/approvals', compact('leaves'));
+}
+
+
+// Approve or reject leave
+public function leave_update()
+{
+    $this->leaveModel = new \App\Models\Leave();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $id = $_POST['leave_id'] ?? null;
+        $action = $_POST['action'] ?? null; // Approved or Rejected
+
+        if ($id && in_array($action, ['Approved','Rejected'])) {
+            $this->leaveModel->updateStatus($id, $action);
+            $_SESSION['success'] = "Leave request has been $action.";
+        } else {
+            $_SESSION['error'] = "Invalid action!";
+        }
+    }
+
+    header('Location: ' . BASE_URL . '/admin/leave_approvals');
+    exit;
+}
+public function updateStatus($id, $status)
+{
+    $id = (int)$id; // sanitize integer
+    $status = $this->db->conn->real_escape_string($status);
+
+    $sql = "UPDATE leave_requests SET status='$status' WHERE id=$id";
+    return $this->db->query($sql);
+}
+
+
+// Approve or Reject leave
+public function leaveAction($id, $action)
+{
+    if (!in_array($action, ['Approved','Rejected'])) {
+        header('Location: ' . BASE_URL . '/admin/leave_approvals');
+        exit;
+    }
+    $this->leaveModel->updateStatus($id, $action);
+    header('Location: ' . BASE_URL . '/admin/leave_approvals');
+    exit;
+}
+
 
 
 

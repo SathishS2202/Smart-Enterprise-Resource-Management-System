@@ -29,6 +29,14 @@
         <div class="actions">
             <a href="/serms/public/auth/login" class="btn-primary">Login</a>
             <a href="/serms/public/auth/register" class="btn-link">Create account</a>
+            <!-- <form method="get" class="language-switcher">
+    <select name="lang" onchange="this.form.submit()">
+        <option value="en" <?= ($_SESSION['lang'] ?? 'en') === 'en' ? 'selected' : '' ?>>English</option>
+        <option value="hi" <?= ($_SESSION['lang'] ?? '') === 'hi' ? 'selected' : '' ?>>हिंदी</option>
+        <option value="es" <?= ($_SESSION['lang'] ?? '') === 'es' ? 'selected' : '' ?>>Español</option>
+    </select>
+</form> -->
+
         </div>
     </div>
 

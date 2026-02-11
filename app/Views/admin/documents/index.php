@@ -16,7 +16,7 @@
 <?php unset($_SESSION['doc_msg']); endif; ?>
 
 <table class="table table-sm table-bordered">
-    <thead class="table-light">
+    <thead class="table-light text-center">
         <tr>
             <th>#</th>
             <th>Title</th>

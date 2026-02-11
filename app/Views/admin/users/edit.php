@@ -2,7 +2,7 @@
 <?php require_once __DIR__ . '/../../layouts/admin_sidebar.php'; ?>
 
 <!-- FULL WIDTH CONTENT -->
-<div class="container-fluid px-4 py-3">
+<div class="container-fluid px-4 pt-3" style="background-color: #f8f9fa; min-height: 85vh;">
 
     <div class="row">
         <div class="col-12">

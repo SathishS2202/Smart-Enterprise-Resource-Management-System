@@ -39,7 +39,7 @@
     <div class="table-responsive">
         <table class="table table-sm table-bordered align-middle w-100">
 
-            <thead class="table-light">
+            <thead class="table-light text-center">
                 <tr>
                     <th style="width:50px">#</th>
                     <th>Name</th>

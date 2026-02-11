@@ -1,7 +1,8 @@
 <?php require_once __DIR__.'/../../layouts/admin_header.php'; ?>
 <?php require_once __DIR__.'/../../layouts/admin_sidebar.php'; ?>
 
-<div class="container-fluid px-4 pt-3">
+<!-- Add background color to the container -->
+<div class="container-fluid px-4 pt-3" style="background-color: #f8f9fa; min-height: 85vh;">
     <h4>Edit Project</h4>
 
     <form method="post" action="<?= BASE_URL ?>/admin/projectsUpdate?id=<?= $project['id'] ?>">
@@ -53,7 +54,7 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary">Update Project</button>
+        <button type="submit" class="btn btn-success">Update Project</button>
         <a href="<?= BASE_URL ?>/admin/projects" class="btn btn-secondary ms-2">Cancel</a>
     </form>
 </div>

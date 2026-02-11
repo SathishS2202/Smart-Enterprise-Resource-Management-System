@@ -18,6 +18,12 @@
     <a href="<?= BASE_URL ?>/admin/attendance"><i class="bi bi-calendar-check"></i><span>Attendance</span></a>
     <a href="<?= BASE_URL ?>/admin/documents"><i class="bi bi-file-earmark-text"></i><span>Documents</span></a>
     <a href="<?= BASE_URL ?>/admin/reports"><i class="bi bi-bar-chart"></i><span>Reports</span></a>
+    <a href="<?= BASE_URL ?>/admin/email" ><i class="bi bi-envelope"></i><span>Send Email</span></a>
+    <a href="<?= BASE_URL ?>/admin/leave_approvals" >
+    <i class="bi bi-check2-square"></i>
+    <span>Leave Approvals</span>
+</a>
+
     <a href="<?= BASE_URL ?>/admin/profile">
     <i class="bi bi-person-circle"></i>
     <span>My Profile</span>

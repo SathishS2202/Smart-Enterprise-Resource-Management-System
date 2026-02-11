@@ -1,186 +1,147 @@
+<?php require_once BASE_PATH . '/app/Views/layouts/admin_header.php'; ?>
+<?php require_once BASE_PATH . '/app/Views/layouts/admin_sidebar.php'; ?>
+
 <div class="container-fluid px-4 py-3">
 
     <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
         <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded">Reports</h5>
-        
     </div>
 
-    <!-- SUMMARY CARDS -->
+    <!-- ======================= USERS REPORTS ======================= -->
+    <h6 class="mt-3 mb-2">Users Distribution</h6>
     <div class="row g-4 mb-4">
-
-    <div class="col-md-6">
-        <div class="card h-100 shadow-sm">
-            <div class="card-header fw-semibold text-center">
-                Users by Role
-            </div>
-            <div class="card-body d-flex justify-content-center align-items-center"
-                 style="height:320px;">
-                <canvas id="usersByRole"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <div class="card h-100 shadow-sm">
-            <div class="card-header fw-semibold text-center">
-                Weekly User Growth
-            </div>
-            <div class="card-body d-flex justify-content-center align-items-center"
-                 style="height:320px;">
-                <canvas id="userGrowth"></canvas>
-            </div>
-        </div>
-    </div>
-
-</div>
-<div class="row g-4 mb-4">
-    <div class="col-md-6">
-        <div class="card h-100 shadow-sm">
-            <div class="card-header fw-semibold text-center">
-                Project Status
-            </div>
-            <div class="card-body d-flex align-items-center justify-content-center"
-                 style="height:320px;">
-                <canvas id="projectStatus"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <div class="card h-100 shadow-sm">
-            <div class="card-header fw-semibold text-center">
-                Projects per Agent
-            </div>
-            <div class="card-body d-flex align-items-center justify-content-center"
-                 style="height:320px;">
-                <canvas id="projectAgent"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-    <!-- CHARTS -->
-    <div class="row g-4">
-
-        <!-- USERS BY ROLE -->
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header fw-semibold">Users by Role</div>
-                <div class="card-body">
-                    <canvas id="usersByRole"></canvas>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">Pie Chart</div>
+                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                    <canvas id="usersPie"></canvas>
                 </div>
             </div>
         </div>
-
-        <!-- PROJECT STATUS -->
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header fw-semibold">Projects by Status</div>
-                <div class="card-body">
-                    <canvas id="projectsByStatus"></canvas>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">Doughnut Chart</div>
+                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                    <canvas id="usersDoughnut"></canvas>
                 </div>
             </div>
         </div>
-
-        <!-- TASK STATUS -->
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header fw-semibold">Tasks by Status</div>
-                <div class="card-body">
-                    <canvas id="tasksByStatus"></canvas>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">Bar Chart</div>
+                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                    <canvas id="usersBar"></canvas>
                 </div>
             </div>
         </div>
-
-        <!-- ATTENDANCE -->
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header fw-semibold">Attendance Summary</div>
-                <div class="card-body">
-                    <canvas id="attendanceChart"></canvas>
-                </div>
-            </div>
-        </div>
-
     </div>
+
+    <!-- ======================= PROJECTS REPORTS ======================= -->
+    <h6 class="mt-3 mb-2">Projects Distribution</h6>
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">Pie Chart</div>
+                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                    <canvas id="projectsPie"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">Doughnut Chart</div>
+                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                    <canvas id="projectsDoughnut"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">Bar Chart</div>
+                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                    <canvas id="projectsBar"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================= TASKS REPORTS ======================= -->
+    <h6 class="mt-3 mb-2">Tasks Distribution</h6>
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">Pie Chart</div>
+                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                    <canvas id="tasksPie"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">Doughnut Chart</div>
+                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                    <canvas id="tasksDoughnut"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">Bar Chart</div>
+                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                    <canvas id="tasksBar"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
-/* ===== USERS BY ROLE ===== */
-const usersByRoleCtx = document.getElementById('usersByRole');
-if (usersByRoleCtx) {
-    new Chart(usersByRoleCtx, {
-        type: 'pie',
-        data: {
-            labels: <?= json_encode(array_column($rolesData ?? [], 'role_name')) ?>,
-            datasets: [{
-                data: <?= json_encode(array_column($rolesData ?? [], 'total')) ?>
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
-}
+/* ===== USERS CHARTS ===== */
+const rolesLabels = <?= json_encode(array_column($rolesData ?? [], 'role_name')) ?>;
+const rolesDataSet = <?= json_encode(array_column($rolesData ?? [], 'total')) ?>;
 
-/* ===== PROJECT STATUS ===== */
-const projectsByStatusCtx = document.getElementById('projectsByStatus');
-if (projectsByStatusCtx) {
-    new Chart(projectsByStatusCtx, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode(array_column($projectStatus ?? [], 'status')) ?>,
-            datasets: [{
-                label: 'Projects',
-                data: <?= json_encode(array_column($projectStatus ?? [], 'total')) ?>
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
-}
+['usersPie','usersDoughnut','usersBar'].forEach(id => {
+    const ctx = document.getElementById(id);
+    if(ctx){
+        new Chart(ctx, {
+            type: id.includes('Bar') ? 'bar' : (id.includes('Doughnut') ? 'doughnut' : 'pie'),
+            data: { labels: rolesLabels, datasets: [{ data: rolesDataSet, backgroundColor: ['#007bff','#28a745','#dc3545','#ffc107'] }] },
+            options: { responsive:true, maintainAspectRatio:false }
+        });
+    }
+});
 
-/* ===== TASK STATUS ===== */
-const tasksByStatusCtx = document.getElementById('tasksByStatus');
-if (tasksByStatusCtx) {
-    new Chart(tasksByStatusCtx, {
-        type: 'bar',
-        data: {
-            labels: <?= json_encode(array_column($taskStatus ?? [], 'status')) ?>,
-            datasets: [{
-                label: 'Tasks',
-                data: <?= json_encode(array_column($taskStatus ?? [], 'total')) ?>
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
-}
+/* ===== PROJECTS CHARTS ===== */
+const projectLabels = <?= json_encode(array_column($projectStatus ?? [], 'status')) ?>;
+const projectDataSet = <?= json_encode(array_column($projectStatus ?? [], 'total')) ?>;
 
-/* ===== ATTENDANCE ===== */
-const attendanceCtx = document.getElementById('attendanceChart');
-if (attendanceCtx) {
-    new Chart(attendanceCtx, {
-        type: 'doughnut',
-        data: {
-            labels: <?= json_encode(array_column($attendanceStats ?? [], 'status')) ?>,
-            datasets: [{
-                data: <?= json_encode(array_column($attendanceStats ?? [], 'total')) ?>
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
-}
+['projectsPie','projectsDoughnut','projectsBar'].forEach(id => {
+    const ctx = document.getElementById(id);
+    if(ctx){
+        new Chart(ctx, {
+            type: id.includes('Bar') ? 'bar' : (id.includes('Doughnut') ? 'doughnut' : 'pie'),
+            data: { labels: projectLabels, datasets: [{ data: projectDataSet, backgroundColor: ['#007bff','#28a745','#dc3545','#ffc107'] }] },
+            options: { responsive:true, maintainAspectRatio:false }
+        });
+    }
+});
+
+/* ===== TASKS CHARTS ===== */
+const taskLabels = <?= json_encode(array_column($taskStatus ?? [], 'status')) ?>;
+const taskDataSet = <?= json_encode(array_column($taskStatus ?? [], 'total')) ?>;
+
+['tasksPie','tasksDoughnut','tasksBar'].forEach(id => {
+    const ctx = document.getElementById(id);
+    if(ctx){
+        new Chart(ctx, {
+            type: id.includes('Bar') ? 'bar' : (id.includes('Doughnut') ? 'doughnut' : 'pie'),
+            data: { labels: taskLabels, datasets: [{ data: taskDataSet, backgroundColor: ['#007bff','#28a745','#dc3545','#ffc107'] }] },
+            options: { responsive:true, maintainAspectRatio:false }
+        });
+    }
+});
 </script>
 
+<?php require_once BASE_PATH . '/app/Views/layouts/footer.php'; ?>

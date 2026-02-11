@@ -4,11 +4,19 @@
 <div class="container-fluid px-4 pt-3">
 
     <!-- PAGE HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
-        <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded">
-            My Projects
-        </h5>
-    </div>
+   <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
+    <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded">
+        My Projects
+    </h5>
+
+   <a href="<?= BASE_URL ?>/client/projects/create"
+   class="btn btn-sm btn-primary">
+    <i class="bi bi-plus-circle"></i> Add Project
+</a>
+
+
+</div>
+
 
     <!-- SEARCH -->
     <div class="row mb-2">
@@ -61,22 +69,27 @@
                             <td class="text-center">
                                 <?php
                                 switch ($project['status'] ?? 'Pending') {
-                                    case 'Pending':
-                                        echo "<span class='badge bg-warning text-dark px-2'>Pending</span>";
-                                        break;
-                                    case 'Active':
-                                    case 'In Progress':
-                                        echo "<span class='badge bg-primary'>In Progress</span>";
-                                        break;
-                                    case 'Completed':
-                                        echo "<span class='badge bg-success'>Completed</span>";
-                                        break;
-                                    case 'On Hold':
-                                        echo "<span class='badge bg-secondary'>On Hold</span>";
-                                        break;
-                                    default:
-                                        echo "<span class='badge bg-light text-dark'>Unknown</span>";
-                                }
+    case 'Pending':
+        echo "<span class='badge bg-warning text-white px-2 py-1' style='font-size:11px'>Pending</span>";
+        break;
+
+    case 'Active':
+    case 'In Progress':
+        echo "<span class='badge bg-primary text-white px-2 py-1' style='font-size:11px'>In Progress</span>";
+        break;
+
+    case 'Completed':
+        echo "<span class='badge bg-success text-white px-2 py-1' style='font-size:11px'>Completed</span>";
+        break;
+
+    case 'On Hold':
+        echo "<span class='badge bg-secondary text-white px-2 py-1' style='font-size:11px'>On Hold</span>";
+        break;
+
+    default:
+        echo "<span class='badge bg-dark text-white px-2 py-1' style='font-size:11px'>Unknown</span>";
+}
+
                                 ?>
                             </td>
 

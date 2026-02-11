@@ -308,16 +308,19 @@ body {
 /* ======== Main ======== */
 .main {
     margin-left: 70px;
-    transition: 0.3s;
+    transition: margin-left 0.3s, width 0.3s;
+    width: calc(100% - 70px);
 }
 
 .sidebar:hover ~ .main {
     margin-left: 220px;
+    width: calc(100% - 220px);
 }
 
 .main-content {
     padding: 30px;
 }
+
 /* Header container */
 .header {
     background: #ffffff;
