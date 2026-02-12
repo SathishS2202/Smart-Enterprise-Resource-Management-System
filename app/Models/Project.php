@@ -367,8 +367,114 @@ public function getAllProjects()
 }
 
 
+public function getByStatus($status)
+{
+    $conn = $this->db->conn;
+
+    $stmt = $conn->prepare("
+        SELECT projects.*, users.name AS client_name
+        FROM projects
+        JOIN users ON projects.client_id = users.id
+        WHERE projects.status = ?
+    ");
+
+    $stmt->bind_param("s", $status);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+    return $result->fetch_all(MYSQLI_ASSOC);
+}
 
 
+
+
+
+public function getAllWithClient()
+{
+    return $this->db->query("
+        SELECT projects.*, users.name AS client_name
+        FROM projects
+        JOIN users ON projects.client_id = users.id
+    ")->fetch_all(MYSQLI_ASSOC);
+}
+
+public function projectsReport()
+{
+    $status = $_GET['status'] ?? null;
+
+    $projectModel = new \App\Models\Project();
+
+    $projects = $status
+        ? $projectModel->getByStatus($status)
+        : $projectModel->getAll();
+
+    require BASE_PATH . '/app/Views/admin/reports/projects_report.php';
+}
+
+
+public function countByAgentAndStatus($agentId, $status) {
+    // Make sure $agentId is an integer
+    $agentId = (int)$agentId;
+
+    // Use mysqli real_escape_string from the connection
+    $status = $this->db->conn->real_escape_string($status);
+
+    $sql = "SELECT COUNT(*) as total 
+            FROM projects 
+            WHERE agent_id = $agentId AND status = '$status'";
+
+    $result = $this->db->query($sql);
+    $row = $result->fetch_assoc();
+    return $row['total'];
+}
+
+ public function getProjectById($projectId)
+    {
+        $projectId = (int)$projectId;
+
+        $sql = "SELECT p.*, c.name AS client_name, a.name AS agent_name
+                FROM projects p
+                LEFT JOIN clients c ON p.client_id = c.id
+                LEFT JOIN users a ON p.agent_id = a.id
+                WHERE p.id = $projectId
+                LIMIT 1";
+
+        $result =$this->db->query($sql);
+        if ($result && $result->num_rows > 0) {
+            return $result->fetch_assoc(); // return single associative array
+        }
+
+        return null; // no project found
+    }
+    public function getTasksByProject($projectId)
+{
+    $projectId = (int)$projectId;
+
+    $sql = "SELECT * FROM tasks WHERE project_id = $projectId ORDER BY due_date ASC";
+    $result = $this->db->query($sql);
+
+    $tasks = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $tasks[] = $row;
+        }
+    }
+
+    return $tasks;
+}
+
+
+
+public function getByAgentAndStatus($agentId, $status)
+{
+    $stmt = $this->db->prepare("
+        SELECT * FROM projects 
+        WHERE agent_id = ? AND status = ?
+    ");
+    $stmt->bind_param("is", $agentId, $status);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
 
 
 }

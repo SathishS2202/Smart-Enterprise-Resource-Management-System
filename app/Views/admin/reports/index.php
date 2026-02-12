@@ -98,50 +98,118 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-/* ===== USERS CHARTS ===== */
+
+/* ==========================================================
+   USERS CHARTS (Clickable)
+========================================================== */
+
 const rolesLabels = <?= json_encode(array_column($rolesData ?? [], 'role_name')) ?>;
 const rolesDataSet = <?= json_encode(array_column($rolesData ?? [], 'total')) ?>;
+
+function handleUsersClick(evt, elements) {
+    if (elements.length > 0) {
+        const index = elements[0].index;
+        const role = rolesLabels[index];
+        window.location.href = "<?= BASE_URL ?>/admin/usersReport?role=" + encodeURIComponent(role);
+    }
+}
 
 ['usersPie','usersDoughnut','usersBar'].forEach(id => {
     const ctx = document.getElementById(id);
     if(ctx){
         new Chart(ctx, {
             type: id.includes('Bar') ? 'bar' : (id.includes('Doughnut') ? 'doughnut' : 'pie'),
-            data: { labels: rolesLabels, datasets: [{ data: rolesDataSet, backgroundColor: ['#007bff','#28a745','#dc3545','#ffc107'] }] },
-            options: { responsive:true, maintainAspectRatio:false }
+            data: {
+                labels: rolesLabels,
+                datasets: [{
+                    data: rolesDataSet,
+                    backgroundColor: ['#007bff','#28a745','#dc3545','#ffc107']
+                }]
+            },
+            options: {
+                responsive:true,
+                maintainAspectRatio:false,
+                onClick: handleUsersClick
+            }
         });
     }
 });
 
-/* ===== PROJECTS CHARTS ===== */
+
+/* ==========================================================
+   PROJECTS CHARTS (Clickable)
+========================================================== */
+
 const projectLabels = <?= json_encode(array_column($projectStatus ?? [], 'status')) ?>;
 const projectDataSet = <?= json_encode(array_column($projectStatus ?? [], 'total')) ?>;
+
+function handleProjectClick(evt, elements) {
+    if (elements.length > 0) {
+        const index = elements[0].index;
+        const status = projectLabels[index];
+        window.location.href = "<?= BASE_URL ?>/admin/projectsReport?status=" + encodeURIComponent(status);
+    }
+}
 
 ['projectsPie','projectsDoughnut','projectsBar'].forEach(id => {
     const ctx = document.getElementById(id);
     if(ctx){
         new Chart(ctx, {
             type: id.includes('Bar') ? 'bar' : (id.includes('Doughnut') ? 'doughnut' : 'pie'),
-            data: { labels: projectLabels, datasets: [{ data: projectDataSet, backgroundColor: ['#007bff','#28a745','#dc3545','#ffc107'] }] },
-            options: { responsive:true, maintainAspectRatio:false }
+            data: {
+                labels: projectLabels,
+                datasets: [{
+                    data: projectDataSet,
+                    backgroundColor: ['#007bff','#28a745','#dc3545','#ffc107']
+                }]
+            },
+            options: {
+                responsive:true,
+                maintainAspectRatio:false,
+                onClick: handleProjectClick
+            }
         });
     }
 });
 
-/* ===== TASKS CHARTS ===== */
+
+/* ==========================================================
+   TASKS CHARTS (Clickable)
+========================================================== */
+
 const taskLabels = <?= json_encode(array_column($taskStatus ?? [], 'status')) ?>;
 const taskDataSet = <?= json_encode(array_column($taskStatus ?? [], 'total')) ?>;
+
+function handleTaskClick(evt, elements) {
+    if (elements.length > 0) {
+        const index = elements[0].index;
+        const status = taskLabels[index];
+        window.location.href = "<?= BASE_URL ?>/admin/tasksReport?status=" + encodeURIComponent(status);
+    }
+}
 
 ['tasksPie','tasksDoughnut','tasksBar'].forEach(id => {
     const ctx = document.getElementById(id);
     if(ctx){
         new Chart(ctx, {
             type: id.includes('Bar') ? 'bar' : (id.includes('Doughnut') ? 'doughnut' : 'pie'),
-            data: { labels: taskLabels, datasets: [{ data: taskDataSet, backgroundColor: ['#007bff','#28a745','#dc3545','#ffc107'] }] },
-            options: { responsive:true, maintainAspectRatio:false }
+            data: {
+                labels: taskLabels,
+                datasets: [{
+                    data: taskDataSet,
+                    backgroundColor: ['#007bff','#28a745','#dc3545','#ffc107']
+                }]
+            },
+            options: {
+                responsive:true,
+                maintainAspectRatio:false,
+                onClick: handleTaskClick
+            }
         });
     }
 });
+
 </script>
+
 
 <?php require_once BASE_PATH . '/app/Views/layouts/footer.php'; ?>

@@ -1,17 +1,10 @@
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_header.php'; ?>
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_sidebar.php'; ?>
 
-<div class="container-fluid px-4 pt-4">
+<div class="container-fluid px-4 pt-3">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h5 class="fw-semibold mb-0">My Profile</h5>
-
-        <!-- Logout -->
-        <a href="<?= BASE_URL ?>/agent/logout"
-           class="btn btn-danger"
-           onclick="return confirm('Are you sure you want to logout?')">
-            Logout
-        </a>
     </div>
 
     <div class="row justify-content-center">
@@ -40,19 +33,9 @@
                             <td><?= htmlspecialchars($user['email'] ?? '-') ?></td>
                         </tr>
                         <tr>
-                            <th>Phone</th>
-                            <td><?= htmlspecialchars($user['phone'] ?? '-') ?></td>
-                        </tr>
-                        <tr>
-                            <th>Status</th>
-                            <td>
-                                <?php if (($user['status'] ?? '') === 'Active'): ?>
-                                    <span class="badge bg-success">Active</span>
-                                <?php else: ?>
-                                    <span class="badge bg-secondary">Inactive</span>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
+                            <th>Joined On</th>
+                            <td><?= isset($user['created_at']) ? date('F j, Y', strtotime($user['created_at'])) : '-' ?></td>
+        
                     </table>
 
                     <div class="d-grid mt-3">

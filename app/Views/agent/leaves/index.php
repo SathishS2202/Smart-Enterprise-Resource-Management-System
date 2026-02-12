@@ -1,14 +1,15 @@
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_header.php'; ?>
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_sidebar.php'; ?>
 
-<div class="container-fluid px-4 pt-4">
+<div class="container-fluid px-4 pt-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4>My Leave Requests</h4>
         <a href="<?= BASE_URL ?>/agent/leaveSubmit" class="btn btn-primary btn-sm">Add Leave</a>
     </div>
+     <div class="card table-container shadow-sm">
 
     <table class="table table-bordered table-hover">
-        <thead class="table-light">
+        <thead class="table-light text-center">
             <tr>
                 <th>#</th>
                 <th>Start Date</th>
@@ -45,6 +46,8 @@
             <?php endif; ?>
         </tbody>
     </table>
+</div>
+
 </div>
 
 <?php require_once BASE_PATH . '/app/Views/layouts/footer.php'; ?>

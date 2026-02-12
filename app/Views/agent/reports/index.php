@@ -1,210 +1,207 @@
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_header.php'; ?>
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_sidebar.php'; ?>
 
-<div class="container-fluid px-4 pt-4">
+<div class="container-fluid px-4 pt-3">
 
-    <h4 class="mb-4">My Reports</h4>
+    <h4 class="mb-4 fw-semibold">My Reports Dashboard</h4>
 
-    <!-- ===== TASKS DISTRIBUTION ===== -->
-    <div class="row g-4 mb-4">
+    <!-- ================= TASK REPORTS ================= -->
+    <div class="row g-4 mb-5">
+
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header fw-semibold text-center">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">
                     Task Status (Pie)
                 </div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                <div class="card-body">
                     <canvas id="taskPieChart"></canvas>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header fw-semibold text-center">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">
                     Task Status (Doughnut)
                 </div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                <div class="card-body">
                     <canvas id="taskDoughnutChart"></canvas>
                 </div>
-                
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header fw-semibold text-center">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">
                     Task Status (Bar)
                 </div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                <div class="card-body">
                     <canvas id="taskBarChart"></canvas>
                 </div>
             </div>
         </div>
+
     </div>
 
-    <!-- ===== ATTENDANCE DISTRIBUTION ===== -->
-    <div class="row g-4 mb-4">
+    <!-- ================= ATTENDANCE REPORTS ================= -->
+    <div class="row g-4 mb-5">
+
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header fw-semibold text-center">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">
                     Attendance (Pie)
                 </div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                <div class="card-body">
                     <canvas id="attendancePieChart"></canvas>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header fw-semibold text-center">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">
                     Attendance (Doughnut)
                 </div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                <div class="card-body">
                     <canvas id="attendanceDoughnutChart"></canvas>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header fw-semibold text-center">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">
                     Attendance (Bar)
                 </div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                <div class="card-body">
                     <canvas id="attendanceBarChart"></canvas>
                 </div>
             </div>
         </div>
+
     </div>
 
-    <!-- ===== PROJECTS DISTRIBUTION ===== -->
+    <!-- ================= PROJECT REPORTS ================= -->
     <div class="row g-4 mb-4">
+
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header fw-semibold text-center">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">
                     Project Status (Pie)
                 </div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                <div class="card-body">
                     <canvas id="projectPieChart"></canvas>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header fw-semibold text-center">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">
                     Project Status (Doughnut)
                 </div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                <div class="card-body">
                     <canvas id="projectDoughnutChart"></canvas>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-header fw-semibold text-center">
+            <div class="card shadow-sm h-100">
+                <div class="card-header text-center fw-semibold">
                     Project Status (Bar)
                 </div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
+                <div class="card-body">
                     <canvas id="projectBarChart"></canvas>
                 </div>
             </div>
         </div>
+
     </div>
 
 </div>
 
-<!-- ===== CHART.JS ===== -->
+<!-- ================= CHART JS ================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-/* ===== TASK CHARTS ===== */
-const taskData = [<?= $pendingTasks ?? 0 ?>, <?= $inProgressTasks ?? 0 ?>, <?= $completedTasks ?? 0 ?>];
-const taskLabels = ['Pending', 'In Progress', 'Completed'];
-const taskColors = ['#fbbf24', '#3b82f6', '#22c55e'];
 
-// Pie
-new Chart(document.getElementById('taskPieChart'), {
-    type: 'pie',
-    data: { labels: taskLabels, datasets: [{ data: taskData, backgroundColor: taskColors }] },
-    options: { responsive: true, maintainAspectRatio: false }
-});
+/* ================= TASK DATA ================= */
 
-// Doughnut
-new Chart(document.getElementById('taskDoughnutChart'), {
-    type: 'doughnut',
-    data: { labels: taskLabels, datasets: [{ data: taskData, backgroundColor: taskColors }] },
-    options: { responsive: true, maintainAspectRatio: false }
-});
+const taskLabels = ['Pending', 'Completed'];
+const taskData = [
+    <?= $pendingTasks ?? 0 ?>,
+    <?= $completedTasks ?? 0 ?>
+];
 
-// Bar
-new Chart(document.getElementById('taskBarChart'), {
-    type: 'bar',
-    data: { labels: taskLabels, datasets: [{ label: 'Tasks', data: taskData, backgroundColor: taskColors }] },
-    options: { responsive: true, maintainAspectRatio: false }
-});
+const taskColors = ['#fbbf24', '#22c55e'];
 
-/* ===== ATTENDANCE CHARTS ===== */
+/* ================= ATTENDANCE DATA ================= */
+
+const attendanceLabels = ['Present','Absent','Late','Leave'];
 const attendanceData = [
     <?= $attendanceData['Present'] ?? 0 ?>,
     <?= $attendanceData['Absent'] ?? 0 ?>,
     <?= $attendanceData['Late'] ?? 0 ?>,
     <?= $attendanceData['Leave'] ?? 0 ?>
 ];
-const attendanceLabels = ['Present', 'Absent', 'Late', 'Leave'];
+
 const attendanceColors = ['#22c55e','#ef4444','#fbbf24','#3b82f6'];
 
-// Pie
-new Chart(document.getElementById('attendancePieChart'), {
-    type: 'pie',
-    data: { labels: attendanceLabels, datasets: [{ data: attendanceData, backgroundColor: attendanceColors }] },
-    options: { responsive: true, maintainAspectRatio: false }
-});
+/* ================= PROJECT DATA ================= */
 
-// Doughnut
-new Chart(document.getElementById('attendanceDoughnutChart'), {
-    type: 'doughnut',
-    data: { labels: attendanceLabels, datasets: [{ data: attendanceData, backgroundColor: attendanceColors }] },
-    options: { responsive: true, maintainAspectRatio: false }
-});
+const projectLabels = ['Active','Completed','Pending'];
+const projectData = [
+    <?= $activeProjects ?? 0 ?>,
+    <?= $completedProjects ?? 0 ?>,
+    <?= ($totalProjects ?? 0) - ($activeProjects ?? 0) - ($completedProjects ?? 0) ?>
+];
 
-// Bar
-new Chart(document.getElementById('attendanceBarChart'), {
-    type: 'bar',
-    data: { labels: attendanceLabels, datasets: [{ label: 'Days', data: attendanceData, backgroundColor: attendanceColors }] },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: { y: { beginAtZero: true } }
-    }
-});
+const projectColors = ['#3b82f6','#22c55e','#fbbf24'];
 
-/* ===== PROJECT CHARTS ===== */
-const projectData = [<?= $activeProjects ?? 0 ?>, <?= $completedProjects ?? 0 ?>, <?= ($totalProjects ?? 0) - ($activeProjects ?? 0) - ($completedProjects ?? 0) ?>];
-const projectLabels = ['Active', 'Completed', 'Pending'];
-const projectColors = ['#3b82f6', '#22c55e', '#fbbf24'];
+/* ================= GENERIC CHART FUNCTION ================= */
 
-// Pie
-new Chart(document.getElementById('projectPieChart'), {
-    type: 'pie',
-    data: { labels: projectLabels, datasets: [{ data: projectData, backgroundColor: projectColors }] },
-    options: { responsive: true, maintainAspectRatio: false }
-});
+function createChart(id, type, labels, data, colors, detailUrl) {
+    return new Chart(document.getElementById(id), {
+        type: type,
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors
+            }]
+        },
+        options: {
+            responsive: true,
+            onClick: (evt, elements) => {
+                if (elements.length > 0) {
+                    const index = elements[0].index;
+                    const label = labels[index];
+                    window.location.href = detailUrl + '?status=' + label;
+                }
+            }
+        }
+    });
+}
 
-// Doughnut
-new Chart(document.getElementById('projectDoughnutChart'), {
-    type: 'doughnut',
-    data: { labels: projectLabels, datasets: [{ data: projectData, backgroundColor: projectColors }] },
-    options: { responsive: true, maintainAspectRatio: false }
-});
+/* ================= TASK CHARTS ================= */
 
-// Bar
-new Chart(document.getElementById('projectBarChart'), {
-    type: 'bar',
-    data: { labels: projectLabels, datasets: [{ label: 'Projects', data: projectData, backgroundColor: projectColors }] },
-    options: { responsive: true, maintainAspectRatio: false }
-});
+createChart('taskPieChart','pie',taskLabels,taskData,taskColors,'<?= BASE_URL ?>/agent/taskDetails');
+createChart('taskDoughnutChart','doughnut',taskLabels,taskData,taskColors,'<?= BASE_URL ?>/agent/taskDetails');
+createChart('taskBarChart','bar',taskLabels,taskData,taskColors,'<?= BASE_URL ?>/agent/taskDetails');
+
+/* ================= ATTENDANCE CHARTS ================= */
+
+createChart('attendancePieChart','pie',attendanceLabels,attendanceData,attendanceColors,'<?= BASE_URL ?>/agent/attendanceDetails');
+createChart('attendanceDoughnutChart','doughnut',attendanceLabels,attendanceData,attendanceColors,'<?= BASE_URL ?>/agent/attendanceDetails');
+createChart('attendanceBarChart','bar',attendanceLabels,attendanceData,attendanceColors,'<?= BASE_URL ?>/agent/attendanceDetails');
+
+/* ================= PROJECT CHARTS ================= */
+
+createChart('projectPieChart','pie',projectLabels,projectData,projectColors,'<?= BASE_URL ?>/agent/projectDetails');
+createChart('projectDoughnutChart','doughnut',projectLabels,projectData,projectColors,'<?= BASE_URL ?>/agent/projectDetails');
+createChart('projectBarChart','bar',projectLabels,projectData,projectColors,'<?= BASE_URL ?>/agent/projectDetails');
+
 </script>
 
 <?php require_once BASE_PATH . '/app/Views/layouts/footer.php'; ?>

@@ -639,7 +639,7 @@ public function documentView()
         exit;
     }
 
-    $document = $this->documentModel->findById($id);
+    $document = $this->documentModel->getById($id);
 
     if (!$document) {
         $_SESSION['doc_msg'] = [
@@ -655,6 +655,138 @@ public function documentView()
         'document' => $document
     ]);
 }
+public function exportTasks()
+{
+    $status = $_GET['status'] ?? null;
+
+    $taskModel = new \App\Models\Task();
+    $tasks = $status
+        ? $taskModel->getByStatus($status)
+        : $taskModel->getAll();
+
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment;filename=tasks_report.csv');
+
+    $output = fopen('php://output', 'w');
+
+    fputcsv($output, ['Title','Status','User ID','Due Date']);
+
+    foreach ($tasks as $task) {
+        fputcsv($output, [
+            $task['title'],
+            $task['status'],
+            $task['user_id'],
+            $task['due_date']
+        ]);
+    }
+
+    fclose($output);
+    exit;
+}
+
+
+public function usersReport()
+{
+    $role = $_GET['role'] ?? null;
+
+    $userModel = new \App\Models\User();
+
+    $users = $role
+        ? $userModel->getByRoleName($role)
+        : $userModel->getAll();
+
+    require BASE_PATH . '/app/Views/admin/reports/users_report.php';
+}
+
+public function projectsReport()
+{
+    $status = $_GET['status'] ?? '';
+
+    $projectModel = new \App\Models\Project();
+
+    if ($status) {
+        $projects = $projectModel->getByStatus($status);
+    } else {
+        $projects = $projectModel->getAllWithClient();
+    }
+
+    $selectedStatus = $status ?: 'All';
+
+     require BASE_PATH . '/app/Views/admin/reports/projects_report.php';
+}
+
+
+public function exportProjectsReport()
+{
+    $status = $_GET['status'] ?? 'Completed';
+
+    $projectModel = new \App\Models\Project();
+    $projects = $projectModel->getByStatus($status);
+
+    header("Content-Type: application/vnd.ms-excel");
+    header("Content-Disposition: attachment; filename=projects_report_" . $status . ".xls");
+
+    echo "ID\tProject Name\tClient\tStatus\tStart Date\tEnd Date\tCreated At\n";
+
+    foreach ($projects as $p) {
+        echo $p['id'] . "\t";
+        echo $p['name'] . "\t";
+        echo ($p['client_name'] ?? 'N/A') . "\t";
+        echo $p['status'] . "\t";
+        echo ($p['start_date'] ?? '-') . "\t";
+        echo ($p['end_date'] ?? '-') . "\t";
+        echo $p['created_at'] . "\n";
+    }
+
+    exit;
+}
+
+
+
+public function exportTaskReport()
+{
+    $status = $_GET['status'] ?? null;
+
+    $taskModel = new Task();
+    $tasks = $taskModel->getByStatus($status);
+
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="task_report.csv"');
+
+    $output = fopen("php://output", "w");
+
+    fputcsv($output, ['ID','Title','Project','Agent','Status','Due Date']);
+
+    foreach ($tasks as $task) {
+        fputcsv($output, [
+            $task['id'],
+            $task['title'],
+            $task['project_title'],
+            $task['agent_name'],
+            $task['status'],
+            $task['due_date']
+        ]);
+    }
+
+    fclose($output);
+    exit;
+}
+
+public function taskReport()
+{
+    $status = $_GET['status'] ?? null;
+
+    $taskModel = new Task();
+
+    if ($status) {
+        $tasks = $taskModel->getByStatus($status);
+    } else {
+        $tasks = $taskModel->getAll();
+    }
+
+    require BASE_PATH . '/app/Views/admin/reports/task_report.php';
+}
+
 public function reports()
 {
     // USERS
@@ -742,6 +874,7 @@ public function changePassword()
             exit;
         }
 
+        $userId = $_SESSION['user_id'];
         $user = $this->userModel->findById($userId);
 
         if (!password_verify($current, $user['password'])) {
@@ -824,10 +957,7 @@ public function leave_update()
 public function updateStatus($id, $status)
 {
     $id = (int)$id; // sanitize integer
-    $status = $this->db->conn->real_escape_string($status);
-
-    $sql = "UPDATE leave_requests SET status='$status' WHERE id=$id";
-    return $this->db->query($sql);
+    $this->leaveModel->updateStatus($id, $status);
 }
 
 

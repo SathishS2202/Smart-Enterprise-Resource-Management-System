@@ -1,7 +1,7 @@
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_sidebar.php'; ?>
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_header.php'; ?>
 
-<div class="container-fluid px-4 pt-4">
+<div class="container-fluid px-4 pt-3">
 
     <h3>Welcome <?= htmlspecialchars($_SESSION['name'] ?? 'Agent') ?></h3>
 

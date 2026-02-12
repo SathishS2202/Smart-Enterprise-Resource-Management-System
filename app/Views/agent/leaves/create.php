@@ -1,7 +1,7 @@
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_header.php'; ?>
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_sidebar.php'; ?>
 
-<div class="container-fluid px-4 pt-4">
+<div class="container-fluid px-4 pt-3" style="background-color: #f8f9fa;">
     <h4>Add Leave Request</h4>
 
     <form method="POST" action="<?= BASE_URL ?>/agent/leaveSubmit" class="mt-3">

@@ -25,6 +25,15 @@
             from user management to project tracking and approvals —
             all in one secure system.
         </p>
+        <div class="dropdown">
+    <img src="<?= BASE_URL ?>/assets/flags/<?= $_SESSION['lang'] ?? 'en' ?>.png" width="30" height="20" data-bs-toggle="dropdown">
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="<?= BASE_URL ?>/public/set_language.php?lang=en"><img src="<?= BASE_URL ?>/assets/flags/en.png" width="20"> English</a></li>
+        <li><a class="dropdown-item" href="<?= BASE_URL ?>/public/set_language.php?lang=es"><img src="<?= BASE_URL ?>/assets/flags/es.png" width="20"> Español</a></li>
+        <li><a class="dropdown-item" href="<?= BASE_URL ?>/public/set_language.php?lang=hi"><img src="<?= BASE_URL ?>/assets/flags/hi.png" width="20"> हिंदी</a></li>
+    </ul>
+</div>
+
 
         <div class="actions">
             <a href="/serms/public/auth/login" class="btn-primary">Login</a>

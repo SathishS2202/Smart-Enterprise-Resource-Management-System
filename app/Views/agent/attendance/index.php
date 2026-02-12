@@ -1,65 +1,112 @@
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_header.php'; ?>
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_sidebar.php'; ?>
 
-<div class="container-fluid px-4 pt-4">
-    <h3>My Attendance</h3>
+<div class="container-fluid px-4 pt-3">
 
-    <!-- CHECK IN / OUT -->
-    <div class="mb-3">
-       <?php if (empty($today)): ?>
-<form method="post" action="<?= BASE_URL ?>/agent/checkIn">
-    <button class="btn btn-success mb-3">
-        <i class="bi bi-check-circle"></i> Check In
-    </button>
-</form>
-<?php else: ?>
-<div class="alert alert-success">
-    ✅ Attendance already marked for today
-</div>
-<?php endif; ?>
+    <h3 class="mb-3">My Attendance</h3>
+
+    <!-- =========================
+         CHECK IN / CHECK OUT CARD
+    ========================== -->
+    <div class="card p-3 mb-4 shadow-sm">
+
+        <?php if (empty($today)): ?>
+
+            <!-- CHECK IN -->
+            <form method="post" action="<?= BASE_URL ?>/agent/checkIn">
+                <button class="btn btn-success btn-sm">
+                    <i class="bi bi-box-arrow-in-right"></i> Check In
+                </button>
+            </form>
+
+        <?php elseif (!empty($today) && empty($today['check_out'])): ?>
+
+            <!-- CHECK OUT -->
+            <form method="post" action="<?= BASE_URL ?>/agent/checkOut">
+                <button class="btn btn-danger btn-sm">
+                    <i class="bi bi-box-arrow-left"></i> Check Out
+                </button>
+            </form>
+
+        <?php else: ?>
+
+            <div class="alert alert-success mb-0 py-2">
+                <i class="bi bi-check-circle-fill"></i>
+                Attendance completed for today
+            </div>
+
+        <?php endif; ?>
 
     </div>
 
-    <!-- TABLE -->
-    <div class="card table-container">
-        <table class="table table-bordered table-hover align-middle">
-            <thead class="table-light">
+
+    <!-- =========================
+         ATTENDANCE TABLE
+    ========================== -->
+    <div class="card table-container shadow-sm">
+
+        <table class="table table-bordered table-hover align-middle mb-0">
+            <thead class="table-light text-center">
                 <tr>
                     <th>#</th>
                     <th>Date</th>
                     <th>Check In</th>
                     <th>Check Out</th>
+                    <th>Working Hours</th>
                     <th>Status</th>
                 </tr>
             </thead>
 
             <tbody>
-            <?php if (!empty($attendance)):
-                $i = 1;
-                foreach ($attendance as $a): ?>
+            <?php if (!empty($attendance)): ?>
+                <?php 
+                $i = 1; 
+                foreach ($attendance as $a): 
+
+                    // Calculate working hours
+                    $hoursWorked = '-';
+                    if (!empty($a['check_in']) && !empty($a['check_out'])) {
+                        $start = strtotime($a['check_in']);
+                        $end   = strtotime($a['check_out']);
+                        $diff  = $end - $start;
+
+                        $hours = floor($diff / 3600);
+                        $minutes = floor(($diff % 3600) / 60);
+
+                        $hoursWorked = $hours . "h " . $minutes . "m";
+                    }
+
+                    // Status Badge
+                    $statusClass =
+                        $a['status'] === 'Present'   ? 'bg-success' :
+                        ($a['status'] === 'Half Day' ? 'bg-warning text-dark' : 'bg-danger');
+                ?>
+                    <tr class="text-center">
+                        <td><?= $i++ ?></td>
+                        <td><?= htmlspecialchars($a['date']) ?></td>
+                        <td><?= $a['check_in'] ?? '-' ?></td>
+                        <td><?= $a['check_out'] ?? '-' ?></td>
+                        <td><?= $hoursWorked ?></td>
+                        <td>
+                            <span class="badge <?= $statusClass ?> px-2 py-1" style="font-size:11px;">
+                                <?= htmlspecialchars($a['status']) ?>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
                 <tr>
-                    <td><?= $i++ ?></td>
-                    <td><?= $a['date'] ?></td>
-                    <td><?= $a['check_in'] ?? '-' ?></td>
-                    <td><?= $a['check_out'] ?? '-' ?></td>
-                    <td>
-                        <span class="badge 
-                            <?= $a['status']=='Present' ? 'bg-success' :
-                               ($a['status']=='Half Day' ? 'bg-warning' : 'bg-danger') ?>">
-                            <?= $a['status'] ?>
-                        </span>
-                    </td>
-                </tr>
-            <?php endforeach; else: ?>
-                <tr>
-                    <td colspan="5" class="text-center text-muted">
+                    <td colspan="6" class="text-center text-muted">
                         No attendance records found
                     </td>
                 </tr>
             <?php endif; ?>
             </tbody>
+
         </table>
+
     </div>
+
 </div>
 
 <?php require_once BASE_PATH . '/app/Views/layouts/footer.php'; ?>

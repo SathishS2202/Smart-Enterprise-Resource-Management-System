@@ -1,56 +1,76 @@
-<?php require_once __DIR__ . '/../../layouts/agent_header.php'; ?>
-<?php require_once __DIR__ . '/../../layouts/agent_sidebar.php'; ?>
+<?php require_once BASE_PATH . '/app/Views/layouts/agent_header.php'; ?>
+<?php require_once BASE_PATH . '/app/Views/layouts/agent_sidebar.php'; ?>
 
 <div class="container-fluid px-4 pt-3">
 
-    <h5 class="mb-3">My Projects</h5>
+    <h3>My Projects</h3>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-sm align-middle">
-            <thead class="table-light">
+    <div class="card table-container mt-3">
+        <table class="table table-bordered table-hover align-middle">
+            
+            <thead class="table-light text-center">
                 <tr>
                     <th>#</th>
                     <th>Project Name</th>
                     <th>Status</th>
-                    <th>Tasks</th>
+                    <th>Tasks Progress</th>
                     <th>Action</th>
                 </tr>
             </thead>
 
             <tbody>
             <?php if (!empty($projects)): ?>
-                <?php foreach ($projects as $index => $project): ?>
-                    <tr>
-                        <td><?= $index + 1 ?></td>
+                <?php $i = 1; foreach ($projects as $project): ?>
 
-                        <td><?= htmlspecialchars($project['name']) ?></td>
+                <?php
+                    $status = $project['status'] ?? 'Pending';
 
-                        <td>
-                            <span class="badge bg-info">
-                                <?= htmlspecialchars($project['status']) ?>
-                            </span>
-                        </td>
+                    // Status Badge Styling
+                    $statusClass =
+                        $status === 'Completed'   ? 'bg-success' :
+                        ($status === 'In Progress' ? 'bg-primary' : 'bg-warning');
 
-                       <td>
-    <?= $project['completed_tasks'] ?? 0 ?>
-    /
-    <?= $project['total_tasks'] ?? 0 ?>
-</td>
+                    $completed = $project['completed_tasks'] ?? 0;
+                    $total     = $project['total_tasks'] ?? 0;
+                ?>
 
+                <tr>
+                    <td><?= $i++ ?></td>
 
-                        <td>
-                            <?php if ($project['status'] === 'In Progress'): ?>
-                                <form method="post" action="<?= BASE_URL ?>/agent/submitForReview">
-                                    <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
-                                    <button class="btn btn-sm btn-success">
-                                        Submit for Review
-                                    </button>
-                                </form>
-                            <?php else: ?>
-                                <span class="text-muted">—</span>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
+                    <td><?= htmlspecialchars($project['name']) ?></td>
+
+                    <!-- STATUS -->
+                    <td class="text-center">
+                        <span class="badge <?= $statusClass ?> px-2 py-1" style="font-size:11px;">
+                            <?= htmlspecialchars($status) ?>
+                        </span>
+                    </td>
+
+                    <!-- TASK PROGRESS -->
+                    <td class="text-center">
+                        <span class="badge bg-secondary px-2 py-1" style="font-size:11px;">
+                            <?= $completed ?> / <?= $total ?>
+                        </span>
+                    </td>
+
+                    <!-- ACTION -->
+                    <td class="text-center">
+                        <?php if ($status === 'In Progress'): ?>
+                            <form method="post" action="<?= BASE_URL ?>/agent/submitForReview" class="d-inline">
+                                <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
+                                <button type="submit"
+                                        class="btn btn-success btn-sm px-2 py-0"
+                                        style="font-size:11px;">
+                                    Submit for Review
+                                </button>
+                            </form>
+                        <?php else: ?>
+                            <span class="text-muted">—</span>
+                        <?php endif; ?>
+                    </td>
+
+                </tr>
+
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
@@ -60,8 +80,10 @@
                 </tr>
             <?php endif; ?>
             </tbody>
+
         </table>
     </div>
+
 </div>
 
-<?php require_once __DIR__ . '/../../layouts/footer.php'; ?>
+<?php require_once BASE_PATH . '/app/Views/layouts/footer.php'; ?>

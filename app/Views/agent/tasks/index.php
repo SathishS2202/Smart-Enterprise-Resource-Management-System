@@ -1,12 +1,12 @@
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_header.php'; ?>
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_sidebar.php'; ?>
 
-<div class="container-fluid px-4 pt-4">
+<div class="container-fluid px-4 pt-3">
     <h3>My Tasks</h3>
 
     <div class="card table-container mt-3">
         <table class="table table-bordered table-hover align-middle">
-            <thead class="table-light">
+            <thead class="table-light text-center">
                 <tr>
                     <th>#</th>
                     <th>Task Title</th>

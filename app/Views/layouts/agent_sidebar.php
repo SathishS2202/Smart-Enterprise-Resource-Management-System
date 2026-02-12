@@ -1,69 +1,24 @@
-
-
 <div class="sidebar">
-
-        <!-- Dashboard -->
-        <li class="nav-item">
-            <a href="<?= BASE_URL ?>/agent" class="nav-link">
-                <i class="bi bi-speedometer2"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-
-        <!-- Projects -->
-        <li class="nav-item">
-            <a href="<?= BASE_URL ?>/agent/projects" class="nav-link">
-                <i class="bi bi-folder"></i>
-                <span>Projects</span>
-            </a>
-        </li>
-
-        <!-- My Tasks -->
-        <li class="nav-item">
-            <a href="<?= BASE_URL ?>/agent/tasks" class="nav-link">
-                <i class="bi bi-list-task"></i>
-                <span>My Tasks</span>
-            </a>
-        </li>
-
-        <!-- Attendance -->
-        <li class="nav-item">
-            <a href="<?= BASE_URL ?>/agent/attendance" class="nav-link">
-                <i class="bi bi-calendar-check"></i>
-                <span>Attendance</span>
-            </a>
-        </li>
-
-        <!-- Reports -->
-        <li class="nav-item">
-            <a href="<?= BASE_URL ?>/agent/reports" class="nav-link">
-                <i class="bi bi-bar-chart"></i>
-                <span>Reports</span>
-            </a>
-        </li>
-
-        <!-- Leave Requests -->
-        <li class="nav-item">
-            <a href="<?= BASE_URL ?>/agent/leaveRequests" class="nav-link">
-                <i class="bi bi-calendar-minus"></i>
-                <span>Leave Requests</span>
-            </a>
-        </li>
-
-        <!-- My Profile -->
-        <li class="nav-item">
-            <a href="<?= BASE_URL ?>/agent/profile" class="nav-link">
-                <i class="bi bi-person-circle"></i>
-                <span>My Profile</span>
-            </a>
-        </li>
-
-        <!-- Logout -->
-        <li class="nav-item mt-3">
-            <a href="<?= BASE_URL ?>/agent/logout" class="nav-link">
-                <i class="bi bi-box-arrow-right"></i> Logout
-            </a>
-        </li>
-
-    </ul>
+   <li class="nav-item">
+       <a href="<?= BASE_URL ?>/agent" class="nav-link">
+        <i class="bi bi-speedometer2"></i>
+        <span>Dashboard</span>
+    </a>
+</li>
+    <a href="<?= BASE_URL ?>/agent/projects"><i class="bi bi-folder"></i><span>Projects</span></a>
+    <a href="<?= BASE_URL ?>/agent/tasks" ><i class="bi bi-list-task"></i><span>Tasks</span></a>
+    <a href="<?= BASE_URL ?>/agent/attendance" ><i class="bi bi-calendar-check"></i><span>Attendance</span></a>
+    <a href="<?= BASE_URL ?>/agent/documents"><i class="bi bi-file-earmark-text"></i><span>Documents</span></a>
+    <a href="<?= BASE_URL ?>/agent/reports"><i class="bi bi-bar-chart"></i><span>Reports</span></a>
+    <a href="<?= BASE_URL ?>/agent/leaveRequests"><i class="bi bi-calendar-minus"></i><span>Leave Requests</span></a>
+    <a href="<?= BASE_URL ?>/agent/profile">
+    <i class="bi bi-person-circle"></i>
+    <span>My Profile</span>
+</a>
+<a href="<?= BASE_URL ?>/agent/logout" >
+    <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
+</a>
 </div>
+
+
+       

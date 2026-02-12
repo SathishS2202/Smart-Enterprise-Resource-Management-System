@@ -316,6 +316,33 @@ public function getAgents()
     return $result->fetch_all(MYSQLI_ASSOC);
 }
 
+public function usersReport()
+{
+    $selectedRole = $_GET['role'] ?? null;
+
+    $userModel = new \App\Models\User();
+
+    if (!empty($selectedRole)) {
+        $users = $userModel->getByRole($selectedRole);
+    } else {
+        $users = $userModel->getAllWithRoles();
+        $selectedRole = 'All';
+    }
+
+    require BASE_PATH . '/app/Views/admin/reports/users_report.php';
+}
+
+
+public function getByRole($roleName)
+{
+    $sql = "SELECT u.*, r.role_name
+            FROM users u
+            LEFT JOIN roles r ON u.role_id = r.id
+            WHERE r.role_name = ?
+            ORDER BY u.created_at DESC";
+
+    return $this->db->query($sql, [$roleName])->fetchAll();
+}
 
 
 // User.php

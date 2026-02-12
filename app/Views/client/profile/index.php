@@ -1,7 +1,7 @@
 <?php require_once __DIR__ . '/../../layouts/client_header.php'; ?>
 <?php require_once __DIR__ . '/../../layouts/client_sidebar.php'; ?>
 
-<div class="container-fluid px-4 pt-4">
+<div class="container-fluid px-4 pt-3">
 
     <h4 class="mb-4">My Profile</h4>
 

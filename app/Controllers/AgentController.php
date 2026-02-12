@@ -16,6 +16,7 @@ class AgentController extends Controller
     protected $userModel;
     protected $projectModel;
     protected $leaveModel;
+    protected $userId;
 
     public function __construct()
     {
@@ -119,6 +120,9 @@ $this->userId= $_SESSION['user_id'];
         ]);
     }
 
+    
+
+
     /* ======================
        ATTENDANCE
     ====================== */
@@ -147,7 +151,7 @@ $this->userId= $_SESSION['user_id'];
             exit;
         }
 
-        $this->attendanceModel->mark($agentId, $status);
+        $this->attendanceModel->markAttendance($agentId, $status);
 
         $_SESSION['success'] = 'Attendance marked';
         header('Location: ' . BASE_URL . '/agent/attendance');
@@ -181,18 +185,43 @@ $this->userId= $_SESSION['user_id'];
     header('Location: ' . BASE_URL . '/agent/attendance');
     exit;
 }
+
+public function checkOut()
+{
+    // Safety check
+    if (!isset($_SESSION['user_id'])) {
+        header("Location: " . BASE_URL . "/auth/login");
+        exit;
+    }
+
+    $userId = $_SESSION['user_id'];
+
+    $attendanceModel = new \App\Models\Attendance();
+    $attendanceModel->checkOut($userId);
+
+    header("Location: " . BASE_URL . "/agent/attendance");
+    exit;
+}
+
 public function reports()
 {
     $agentId = $_SESSION['user_id'];
 
-    // TASK COUNTS
-    $pendingTasks   = $this->taskModel->countByAgentAndStatus($agentId, 'Pending');
-    $completedTasks = $this->taskModel->countByAgentAndStatus($agentId, 'Completed');
+    /* =========================
+       TASK COUNTS
+    ==========================*/
+    $pendingTasks     = $this->taskModel->countByAgentAndStatus($agentId, 'Pending');
+    $inProgressTasks  = $this->taskModel->countByAgentAndStatus($agentId, 'In Progress');
+    $completedTasks   = $this->taskModel->countByAgentAndStatus($agentId, 'Completed');
 
-    // ATTENDANCE COUNTS
+    /* =========================
+       ATTENDANCE COUNTS
+    ==========================*/
     $attendance = $this->attendanceModel->summaryByAgent($agentId);
 
-    // Convert attendance rows to key-value
+    if (!is_array($attendance)) {
+    $attendance = [];
+}
     $attendanceData = [
         'Present' => 0,
         'Absent'  => 0,
@@ -201,15 +230,154 @@ public function reports()
     ];
 
     foreach ($attendance as $row) {
-        $attendanceData[$row['status']] = $row['total'];
+    // Safety check: make sure $row has 'status' and 'total'
+    if (isset($row['status'], $row['total'])) {
+        $attendanceData[$row['status']] = (int)$row['total'];
     }
+    /* =========================
+       PROJECT COUNTS
+    ==========================*/
+    $activeProjects     = $this->projectModel->countByAgentAndStatus($agentId, 'Active');
+    $completedProjects  = $this->projectModel->countByAgentAndStatus($agentId, 'Completed');
+    $pendingProjects    = $this->projectModel->countByAgentAndStatus($agentId, 'Pending');
 
+    /* =========================
+       RENDER VIEW
+    ==========================*/
     $this->render('agent/reports/index', compact(
         'pendingTasks',
+        'inProgressTasks',
         'completedTasks',
-        'attendanceData'
+        'attendanceData',
+        'activeProjects',
+        'completedProjects',
+        'pendingProjects'
     ));
 }
+}
+
+public function projectDetails($projectId)
+{
+    $projectId = (int)$projectId;
+    $project = $this->projectModel->getProjectById($projectId);
+
+    if (!$project) {
+        die("Project not found!");
+    }
+
+    // Fetch tasks for this project
+    $tasks = $this->taskModel->getTasksByProject($projectId);
+
+    $this->render('agent/projects/details', compact('project', 'tasks'));
+}
+public function exportProjectTasks()
+{
+    session_start();
+    $projectId = $_GET['project_id'] ?? 0;
+    $projectId = (int)$projectId;
+
+    if (!$projectId) {
+        die("Invalid Project ID");
+    }
+
+    // Fetch tasks for this project
+    $tasks = $this->taskModel->getTasksByProject($projectId);
+
+    if (empty($tasks)) {
+        die("No tasks found for this project.");
+    }
+
+    // Set CSV headers
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="project_' . $projectId . '_tasks.csv"');
+
+    $output = fopen('php://output', 'w');
+
+    // CSV column headers
+    fputcsv($output, ['Task Title', 'Status', 'Due Date', 'Created At']);
+
+    // Write rows
+    foreach ($tasks as $task) {
+        fputcsv($output, [
+            $task['title'],
+            $task['status'],
+            $task['due_date'] ?? '-',
+            $task['created_at']
+        ]);
+    }
+
+    fclose($output);
+    exit;
+}
+
+
+public function tasksExport()
+{
+    session_start();
+    $agentId = $_SESSION['user_id'];
+    $status  = $_GET['status'] ?? 'All';
+
+    // Fetch tasks assigned to this agent with optional status filter
+    $tasks = $this->taskModel->getTasksByAgentAndStatus($agentId, $status);
+
+    // Prepare CSV headers
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="tasks_' . strtolower($status) . '.csv"');
+
+    $output = fopen('php://output', 'w');
+
+    // Column headers
+    fputcsv($output, ['Task Title', 'Project Name', 'Status', 'Start Date', 'Due Date', 'Created At']);
+
+    // Populate rows
+    foreach ($tasks as $task) {
+        fputcsv($output, [
+            $task['title'],
+            $task['project_name'] ?? '-',   // join in model to get project name
+            $task['status'],
+            $task['start_date'] ?? '-',
+            $task['due_date'] ?? '-',
+            $task['created_at']
+        ]);
+    }
+
+    fclose($output);
+    exit;
+}
+
+
+public function taskDetails()
+{
+    $agentId = $_SESSION['user_id'];
+    $status  = $_GET['status'] ?? '';
+
+    if (!$status) {
+        header("Location: " . BASE_URL . "/agent/reports");
+        exit;
+    }
+
+    $tasks = $this->taskModel->getByAgentAndStatus($agentId, $status);
+
+    $this->render('agent/reports/task_details', compact('tasks', 'status'));
+}
+
+
+public function attendanceDetails()
+{
+    $agentId = $_SESSION['user_id'];
+    $status  = $_GET['status'] ?? '';
+
+    if (!$status) {
+        header("Location: " . BASE_URL . "/agent/reports");
+        exit;
+    }
+
+    $records = $this->attendanceModel->getByAgentAndStatus($agentId, $status);
+
+    $this->render('agent/reports/attendance_details', compact('records', 'status'));
+}
+
+
 public function changePassword()
 {
     $userId = $_SESSION['user_id'];
@@ -324,6 +492,46 @@ public function leaveSubmit()
 
     $this->render('agent/leaves/create');
 }
+public function attendanceExport()
+{
+    // Optional: Check if user is logged in
+    if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Agent') {
+        header("Location: " . BASE_URL . "/auth/login");
+        exit;
+    }
+
+    $status = $_GET['status'] ?? 'All';
+
+    // Load the model
+    $attendanceModel = new \App\Models\Attendance();
+
+    // Get attendance records filtered by status
+    $records = $attendanceModel->getByStatus($_SESSION['user_id'], $status);
+
+    // Set headers for CSV download
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="attendance_' . strtolower($status) . '.csv"');
+
+    $output = fopen('php://output', 'w');
+
+    // Add CSV column headers
+    fputcsv($output, ['Date', 'Status', 'Check In', 'Check Out', 'Remarks']);
+
+    foreach ($records as $row) {
+        fputcsv($output, [
+            $row['date'],
+            $row['status'],
+            $row['check_in'],
+            $row['check_out'],
+            $row['remarks']
+        ]);
+    }
+
+    fclose($output);
+    exit;
+}
+
+
 
 
 

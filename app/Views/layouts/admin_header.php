@@ -12,6 +12,7 @@
 
 
     <body>
+        <div class="container-fluid px-4 pt-3">
 
 <div class="header d-flex justify-content-between align-items-center p-2 shadow-sm bg-white">
 

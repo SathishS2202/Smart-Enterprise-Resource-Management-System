@@ -9,6 +9,7 @@ class Attendance {
     public function __construct() {
         // Get the DB instance (singleton)
         $this->db = Database::getInstance();
+        
     }
 
     /**
@@ -230,16 +231,91 @@ public function markCheckOut($agentId)
 
         return $this->db->query($sql);
     }
-   public function summaryByAgent(int $agentId): array
+
+
+ public function countByAgentAndStatus($agentId, $status)
 {
-    return $this->db->fetchAll("
-        SELECT status, COUNT(*) AS total
+    $stmt = $this->db->prepare("
+        SELECT COUNT(*) as total 
+        FROM attendance 
+        WHERE user_id = ? AND status = ?
+    ");
+    $stmt->bind_param("is", $agentId, $status);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_assoc()['total'];
+}
+
+    public function summaryByAgent($agentId)
+{
+    $agentId = (int)$agentId;
+    $sql = "
+        SELECT status, COUNT(*) as total
         FROM attendance
         WHERE user_id = $agentId
         GROUP BY status
-    ");
+    ";
+
+    $result = $this->db->conn->query($sql);
+
+    $data = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+    }
+
+    return $data; // ALWAYS return array, even if empty
 }
 
- 
+
+     public function getByStatus($userId, $status = 'All') {
+    $userId = (int)$userId;
+    $sql = "SELECT * FROM attendance WHERE user_id = $userId";
+
+    if ($status !== 'All') {
+        $statusEscaped = $this->db->conn->real_escape_string($status);
+        $sql .= " AND status = '$statusEscaped'";
+    }
+
+    $sql .= " ORDER BY date DESC";
+
+    $result = $this->db->conn->query($sql);
+
+    $records = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $records[] = $row;
+        }
+    }
+
+    return $records; // ALWAYS return an array
+}
+
+
+
+    /**
+     * Get detailed attendance records for an agent by status
+     */
+    public function getByAgentAndStatus($userId, $status)
+    {
+        $userId = (int)$userId;           // safe cast
+        $status = addslashes($status);    // escape single quotes
+
+        $sql = "SELECT * FROM attendance 
+                WHERE user_id = $userId AND status = '$status' 
+                ORDER BY date DESC";
+
+        $result = $this->db->query($sql);
+
+        $data = [];
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
+    }
+
 
 }

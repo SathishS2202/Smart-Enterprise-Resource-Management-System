@@ -172,14 +172,14 @@ public function countPendingByAgent(int $agentId): int
     // Count tasks for an agent by status
    
     // Count tasks assigned to an agent by status
-    public function countByAgentAndStatus($agentId, $status)
-    {
-        $agentId = (int)$agentId;
-        $status = addslashes($status);
-        $sql = "SELECT COUNT(*) as total FROM tasks WHERE assigned_to = $agentId AND status = '$status'";
-        $row = $this->db->fetch($sql);
-        return $row ? (int)$row['total'] : 0;
-    }
+    // public function countByAgentAndStatus($agentId, $status)
+    // {
+    //     $agentId = (int)$agentId;
+    //     $status = addslashes($status);
+    //     $sql = "SELECT COUNT(*) as total FROM tasks WHERE assigned_to = $agentId AND status = '$status'";
+    //     $row = $this->db->fetch($sql);
+    //     return $row ? (int)$row['total'] : 0;
+    // }
 
     // Get all tasks assigned to an agent
     public function getByAgent($agentId)
@@ -294,12 +294,81 @@ public function getAllTasks()
 
     return $stmt->fetch_all(MYSQLI_ASSOC);
 }
+public function getByStatus($status)
+{
+    $stmt = $this->db->prepare("
+        SELECT t.*, u.name as agent_name, p.title as project_title
+        FROM tasks t
+        LEFT JOIN users u ON t.user_id = u.id
+        LEFT JOIN projects p ON t.project_id = p.id
+        WHERE t.status = ?
+    ");
+    $stmt->execute([$status]);
+    return $stmt->fetchAll();
+}
+
+// Task.php model
+public function getByAgentAndStatus($agentId, $status)
+    {
+        $agentId = (int)$agentId; // ensure integer
+        $status = addslashes($status); // escape string safely
+
+        $sql = "SELECT * FROM tasks WHERE assigned_to = $agentId AND status = '$status' ORDER BY due_date DESC";
+        return $this->db->query($sql)->fetch_all(MYSQLI_ASSOC);
+    }
+
+    // Count tasks for agent by status
+    public function countByAgentAndStatus($agentId, $status)
+    {
+        $agentId = (int)$agentId;
+        $status = addslashes($status);
+
+        $sql = "SELECT COUNT(*) as total FROM tasks WHERE assigned_to = $agentId AND status = '$status'";
+        $result = $this->db->query($sql)->fetch_assoc();
+        return $result['total'] ?? 0;
+    }
+
+public function getTasksByAgentAndStatus($agentId, $status = 'All') {
+    $agentId = (int)$agentId;
+
+    $sql = "SELECT t.*, p.name as project_name
+            FROM tasks t
+            LEFT JOIN projects p ON t.project_id = p.id
+            WHERE t.assigned_to = $agentId";
+
+    if ($status !== 'All') {
+        $statusEscaped = $this->db->conn->real_escape_string($status);
+        $sql .= " AND t.status = '$statusEscaped'";
+    }
+
+    $sql .= " ORDER BY t.due_date ASC";
+
+    $result = $this->db->conn->query($sql);
+
+    $tasks = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $tasks[] = $row;
+        }
+    }
+
+    return $tasks;
+}
 
 
 
+public function tasksReport()
+{
+    $status = $_GET['status'] ?? null;
 
+    $taskModel = new \App\Models\Task();
 
+    $tasks = $status
+        ? $taskModel->getByStatus($status)
+        : $taskModel->getAll();
 
+    require BASE_PATH . '/app/Views/admin/reports/tasks_report.php';
+}
 
 
     

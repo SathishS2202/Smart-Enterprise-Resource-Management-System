@@ -256,53 +256,47 @@ body {
 }
 
 /* ======== Sidebar ======== */
+/* Sidebar */
 .sidebar {
     position: fixed;
-    left: 0;
-    top: 0;
+    top: 0; left: 0;
     height: 100vh;
-    width: 70px;
+    width: 70px; /* collapsed width */
     background: #111827;
-    transition: 0.3s;
+    transition: width 0.3s;
     overflow: hidden;
     z-index: 1000;
 }
 
-.sidebar:hover {
-    width: 220px;
-}
+.sidebar:hover { width: 220px; }
 
 .sidebar a {
     display: flex;
     align-items: center;
     color: #cbd5e1;
-    text-decoration: none;
     padding: 15px;
     gap: 15px;
+    text-decoration: none;
     white-space: nowrap;
     border-radius: 8px;
     margin: 5px 8px;
-    transition: 0.2s;
+    transition: all 0.2s;
 }
 
-.sidebar a i {
-    font-size: 20px;
-    min-width: 30px;
-    text-align: center;
-}
+.sidebar a span { opacity: 0; transition: opacity 0.3s; }
+.sidebar:hover a span { opacity: 1; }
 
-.sidebar a span {
-    opacity: 0;
-    transition: opacity 0.3s;
-}
+.sidebar a:hover { background: #2563eb; color: #fff; }
 
-.sidebar:hover a span {
-    opacity: 1;
+/* Main content adjusts when sidebar expands */
+.main {
+    margin-left: 70px;
+    transition: margin-left 0.3s, width 0.3s;
+    width: calc(100% - 70px);
 }
-
-.sidebar a:hover {
-    background: #2563eb;
-    color: #fff;
+.sidebar:hover ~ .main {
+    margin-left: 220px;
+    width: calc(100% - 220px);
 }
 
 /* ======== Main ======== */
