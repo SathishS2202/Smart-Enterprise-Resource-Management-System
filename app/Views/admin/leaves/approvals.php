@@ -3,7 +3,7 @@
 
 <div class="container-fluid px-4 pt-4">
 
-    <h4 class="mb-4">Leave Approvals</h4>
+    <h4 class="mb-4"><?= __('leave_approvals') ?></h4>
 
     <?php if (!empty($_SESSION['success'])): ?>
         <div class="alert alert-success"><?= $_SESSION['success']; unset($_SESSION['success']); ?></div>
@@ -17,12 +17,12 @@
             <thead class="table-light text-center">
                 <tr>
                     <th>#</th>
-                    <th>User</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Reason</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th><?= __('user') ?></th>
+                    <th><?= __('start_date') ?></th>
+                    <th><?= __('end_date') ?></th>
+                    <th><?= __('reason') ?></th>
+                    <th><?= __('status') ?></th>
+                    <th><?= __('actions') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -56,12 +56,12 @@
     <form method="post" action="<?= BASE_URL ?>/admin/leave_update" class="d-inline">
         <input type="hidden" name="leave_id" value="<?= $leave['id'] ?>">
         <input type="hidden" name="action" value="Approved">
-        <button type="submit" class="btn btn-sm btn-success">Approve</button>
+        <button type="submit" class="btn btn-sm btn-success"><?= __('approve') ?></button>
     </form>
     <form method="post" action="<?= BASE_URL ?>/admin/leave_update" class="d-inline">
         <input type="hidden" name="leave_id" value="<?= $leave['id'] ?>">
         <input type="hidden" name="action" value="Rejected">
-        <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+        <button type="submit" class="btn btn-sm btn-danger"><?= __('reject') ?></button>
     </form>
 </td>
 
@@ -69,7 +69,7 @@
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="7" class="text-center text-muted">No pending leave requests</td>
+                        <td colspan="7" class="text-center text-muted"><?= __('no_pending_leave_requests') ?></td>
                     </tr>
                 <?php endif; ?>
             </tbody>

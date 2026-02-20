@@ -1,24 +1,25 @@
 <?php
+
 namespace Core;
 
 class Language
 {
-    private static $data = [];
+    private static $translations = [];
 
-    // Load the language file
-    public static function load($lang = 'en')
+    public static function load($locale)
     {
-        $file = __DIR__ . "/../app/Languages/$lang.php";
-        if (file_exists($file)) {
-            self::$data = include $file;
-        } else {
-            self::$data = include __DIR__ . "/../app/Languages/en.php";
+        $basePath = dirname(__DIR__);
+        $file = $basePath . "/app/Lang/$locale.php";
+
+        if (!file_exists($file)) {
+            $file = $basePath . "/app/Lang/en.php";
         }
+
+        self::$translations = require $file;
     }
 
-    // Get a translation
     public static function get($key)
     {
-        return self::$data[$key] ?? $key;
+        return self::$translations[$key] ?? $key;
     }
 }

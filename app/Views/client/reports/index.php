@@ -3,10 +3,10 @@
 
 <div class="container-fluid px-4 pt-4">
 
-<h4 class="mb-4">Reports & Analytics</h4>
+<h4 class="mb-4"><?= __('Reports & Analytics') ?></h4>
 
 <!-- ================= TASKS DISTRIBUTION ================= -->
-<h6 class="fw-semibold mb-2">Tasks Distribution</h6>
+<h6 class="fw-semibold mb-2"><?= __('Tasks Distribution') ?></h6>
 <div class="row g-3 mb-4">
 
     <div class="col-md-4">
@@ -30,7 +30,7 @@
 </div>
 
 <!-- ================= PROJECTS DISTRIBUTION ================= -->
-<h6 class="fw-semibold mb-2">Projects Distribution</h6>
+<h6 class="fw-semibold mb-2"><?= __('Projects Distribution') ?></h6>
 <div class="row g-3 mb-4">
 
     <div class="col-md-4">
@@ -54,7 +54,7 @@
 </div>
 
 <!-- ================= PROGRESS TRENDS ================= -->
-<h6 class="fw-semibold mb-2">Overall Progress</h6>
+<h6 class="fw-semibold mb-2"><?= __('Overall Progress') ?></h6>
 <div class="row g-3 mb-4">
 
     <div class="col-md-4">

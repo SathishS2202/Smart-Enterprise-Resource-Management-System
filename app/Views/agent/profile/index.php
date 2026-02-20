@@ -4,7 +4,7 @@
 <div class="container-fluid px-4 pt-3">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5 class="fw-semibold mb-0">My Profile</h5>
+        <h5 class="fw-semibold mb-0"><?= __('My Profile') ?></h5>
     </div>
 
     <div class="row justify-content-center">
@@ -25,15 +25,15 @@
 
                     <table class="table table-sm table-borderless">
                         <tr>
-                            <th width="35%">Username</th>
+                            <th width="35%"><?= __('Username') ?></th>
                             <td><?= htmlspecialchars($user['username'] ?? '-') ?></td>
                         </tr>
                         <tr>
-                            <th>Email</th>
+                            <th><?= __('Email') ?></th>
                             <td><?= htmlspecialchars($user['email'] ?? '-') ?></td>
                         </tr>
                         <tr>
-                            <th>Joined On</th>
+                            <th><?= __('Joined On') ?></th>
                             <td><?= isset($user['created_at']) ? date('F j, Y', strtotime($user['created_at'])) : '-' ?></td>
         
                     </table>
@@ -41,16 +41,13 @@
                     <div class="d-grid mt-3">
                         <a href="<?= BASE_URL ?>/agent/changePassword"
                            class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-key"></i> Change Password
+                            <i class="bi bi-key"></i> <?= __('Change Password') ?>
                         </a>
                     </div>
 
                 </div>
             </div>
-
         </div>
     </div>
-
 </div>
-
 <?php require_once BASE_PATH . '/app/Views/layouts/footer.php'; ?>

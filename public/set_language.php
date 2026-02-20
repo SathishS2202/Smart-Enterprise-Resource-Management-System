@@ -1,7 +1,9 @@
 <?php
-require_once __DIR__ . '/../app/init.php'; // Load Core + Autoloader
-use App\Controllers\LanguageController;
+session_start();
 
-$lang = $_GET['lang'] ?? 'en';
-$controller = new LanguageController();
-$controller->switch($lang);
+if (isset($_GET['lang'])) {
+    $_SESSION['lang'] = $_GET['lang'];
+}
+
+header("Location: " . $_SERVER['HTTP_REFERER']);
+exit;

@@ -4,11 +4,11 @@
 <div class="container-fluid px-4 py-3">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-semibold">Projects Report</h5>
+        <h5 class="fw-semibold"><?= __('Projects Report') ?></h5>
 
         <a href="<?= BASE_URL ?>/admin/exportProjectsReport?status=<?= urlencode($selectedStatus ?? '') ?>"
            class="btn btn-sm btn-success">
-            <i class="bi bi-download"></i> Export CSV
+            <i class="bi bi-download"></i> <?= __('Export CSV') ?>
         </a>
     </div>
 
@@ -28,12 +28,12 @@
                 <thead class="table-light">
                     <tr>
                         <th>#</th>
-                        <th>Project Name</th>
-                        <th>Client</th>
-                        <th>Status</th>
-                        <th>Start Date</th>
-                        <th>Deadline</th>
-                        <th>Created At</th>
+                        <th><?= __('Project Name') ?></th>
+                        <th><?= __('Client') ?></th>
+                        <th><?= __('Status') ?></th>
+                        <th><?= __('Start Date') ?></th>
+                        <th><?= __('Deadline') ?></th>
+                        <th><?= __('Created At') ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,7 +62,7 @@
 <?php else: ?>
     <tr>
         <td colspan="7" class="text-center text-muted">
-            No projects found for this status
+           <?= __('No projects found for this status') ?>
         </td>
     </tr>
 <?php endif; ?>

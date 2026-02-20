@@ -3,7 +3,7 @@
 
 <div class="container-fluid px-4 pt-3">
 
-    <h3 class="mb-3">My Attendance</h3>
+    <h3 class="mb-3"><?= __('My Attendance') ?></h3>
 
     <!-- =========================
          CHECK IN / CHECK OUT CARD
@@ -15,7 +15,7 @@
             <!-- CHECK IN -->
             <form method="post" action="<?= BASE_URL ?>/agent/checkIn">
                 <button class="btn btn-success btn-sm">
-                    <i class="bi bi-box-arrow-in-right"></i> Check In
+                    <i class="bi bi-box-arrow-in-right"></i> <?= __('Check In') ?>
                 </button>
             </form>
 
@@ -24,7 +24,7 @@
             <!-- CHECK OUT -->
             <form method="post" action="<?= BASE_URL ?>/agent/checkOut">
                 <button class="btn btn-danger btn-sm">
-                    <i class="bi bi-box-arrow-left"></i> Check Out
+                    <i class="bi bi-box-arrow-left"></i> <?= __('Check Out') ?>
                 </button>
             </form>
 
@@ -32,7 +32,7 @@
 
             <div class="alert alert-success mb-0 py-2">
                 <i class="bi bi-check-circle-fill"></i>
-                Attendance completed for today
+                <?= __('Attendance completed for today') ?>
             </div>
 
         <?php endif; ?>
@@ -49,11 +49,11 @@
             <thead class="table-light text-center">
                 <tr>
                     <th>#</th>
-                    <th>Date</th>
-                    <th>Check In</th>
-                    <th>Check Out</th>
-                    <th>Working Hours</th>
-                    <th>Status</th>
+                    <th><?= __('Date') ?></th>
+                    <th><?= __('Check In') ?></th>
+                    <th><?= __('Check Out') ?></th>
+                    <th><?= __('Working Hours') ?></th>
+                    <th><?= __('Status') ?></th>
                 </tr>
             </thead>
 
@@ -78,8 +78,8 @@
 
                     // Status Badge
                     $statusClass =
-                        $a['status'] === 'Present'   ? 'bg-success' :
-                        ($a['status'] === 'Half Day' ? 'bg-warning text-dark' : 'bg-danger');
+                        $a['status'] === __('Present')   ? 'bg-success' :
+                        ($a['status'] === __('Half Day') ? 'bg-warning text-dark' : 'bg-danger');
                 ?>
                     <tr class="text-center">
                         <td><?= $i++ ?></td>
@@ -97,7 +97,7 @@
             <?php else: ?>
                 <tr>
                     <td colspan="6" class="text-center text-muted">
-                        No attendance records found
+                        <?= __('No attendance records found') ?>
                     </td>
                 </tr>
             <?php endif; ?>

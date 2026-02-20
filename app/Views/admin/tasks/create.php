@@ -6,14 +6,14 @@
 
     <form method="post" action="<?= BASE_URL ?>/admin/tasksStore">
         <div class="mb-3">
-            <label>Task Name</label>
+            <label><?= __('task_name') ?></label>
             <input type="text" name="title" class="form-control" required>
         </div>
 
         <div class="mb-3">
-            <label>Project</label>
+            <label><?= __('project') ?></label>
             <select name="project_id" class="form-control" required>
-                <option value="">Select Project</option>
+                <option value="">_<?= __('select_project') ?></option>
                 <?php foreach($projects as $project): ?>
                     <option value="<?= $project['id'] ?>"><?= htmlspecialchars($project['name']) ?></option>
                 <?php endforeach; ?>
@@ -21,9 +21,9 @@
         </div>
 
         <div class="mb-3">
-            <label>Assign Agent</label>
+            <label><?= __('assign_agent') ?></label>
             <select name="agent_id" class="form-control">
-                <option value="">Select Agent (optional)</option>
+                <option value="">_<?= __('select_agent') ?></option>
                 <?php foreach($agents as $agent): ?>
                     <option value="<?= $agent['id'] ?>"><?= htmlspecialchars($agent['name']) ?></option>
                 <?php endforeach; ?>
@@ -31,18 +31,18 @@
         </div>
 
         <div class="mb-3">
-            <label>Start Date</label>
+            <label><?= __('start_date') ?></label>
             <input type="date" name="start_date" class="form-control">
         </div>
 
         <div class="mb-3">
-            <label>Due Date</label>
+            <label><?= __('due_date') ?></label>
             <input type="date" name="due_date" class="form-control">
 
         </div>
 
         <div class="mb-3">
-            <label>Status</label>
+            <label><?= __('status') ?></label>
             <select name="status" class="form-control">
                 <?php foreach(['Pending','In Progress','Completed','On Hold'] as $status): ?>
                     <option value="<?= $status ?>"><?= $status ?></option>
@@ -50,8 +50,8 @@
             </select>
         </div>
 
-        <button class="btn btn-success" type="submit">Add Task</button>
-        <a href="<?= BASE_URL ?>/admin/tasks" class="btn btn-secondary ms-2">Cancel</a>
+        <button class="btn btn-success" type="submit"><?= __('add_task') ?></button>
+        <a href="<?= BASE_URL ?>/admin/tasks" class="btn btn-secondary ms-2"><?= __('cancel') ?></a>
     </form>
 </div>
 

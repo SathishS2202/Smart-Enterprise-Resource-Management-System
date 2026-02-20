@@ -6,12 +6,12 @@
     <!-- PAGE HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
         <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded">
-            Add New Project
+            <?= __('Add New Project') ?>
         </h5>
 
         <a href="<?= BASE_URL ?>/client/projects"
            class="btn btn-sm btn-secondary">
-            <i class="bi bi-arrow-left"></i> Back
+            <i class="bi bi-arrow-left"></i> <?= __('Back') ?>
         </a>
     </div>
 
@@ -23,12 +23,12 @@
             <!-- PROJECT NAME -->
             <div class="mb-2">
                 <label class="form-label small fw-semibold">
-                    Project Name <span class="text-danger">*</span>
+                    <?= __('Project Name') ?> <span class="text-danger">*</span>
                 </label>
                 <input type="text"
                        name="name"
                        class="form-control form-control-sm"
-                       placeholder="Enter project name"
+                       placeholder="_<?= __('Enter project name') ?>"
                        required>
             </div>
 
@@ -36,7 +36,7 @@
             <div class="row">
                 <div class="col-md-6 mb-2">
                     <label class="form-label small fw-semibold">
-                        Start Date
+                        <?= __('Start Date') ?>
                     </label>
                     <input type="date"
                            name="start_date"
@@ -45,7 +45,7 @@
 
                 <div class="col-md-6 mb-2">
                     <label class="form-label small fw-semibold">
-                        End Date
+                        <?= __('End Date') ?>
                     </label>
                     <input type="date"
                            name="end_date"
@@ -56,19 +56,19 @@
             <!-- INFO -->
             <div class="alert alert-info py-2 small mt-2 mb-3">
                 <i class="bi bi-info-circle"></i>
-                This project request will be reviewed by Admin before activation.
+                <?= __('This project request will be reviewed by Admin before activation.') ?>
             </div>
 
             <!-- ACTIONS -->
             <div class="d-flex gap-2">
                 <button type="submit"
                         class="btn btn-sm btn-primary px-4">
-                    Add project
+                    <?= __('Add Project') ?>
                 </button>
 
                 <a href="<?= BASE_URL ?>/client/projects"
                    class="btn btn-sm btn-outline-secondary px-4">
-                    Cancel
+                    <?= __('Cancel') ?>
                 </a>
             </div>
 

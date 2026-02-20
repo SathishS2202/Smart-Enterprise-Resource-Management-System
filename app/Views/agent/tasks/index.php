@@ -2,19 +2,20 @@
 <?php require_once BASE_PATH . '/app/Views/layouts/agent_sidebar.php'; ?>
 
 <div class="container-fluid px-4 pt-3">
-    <h3>My Tasks</h3>
+    <h3>
+        <?= __('My Tasks') ?></h3>
 
     <div class="card table-container mt-3">
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-light text-center">
                 <tr>
                     <th>#</th>
-                    <th>Task Title</th>
-                    <th>Project</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Due Date</th>
-                    <th>Actions</th>
+                    <th><?= __('Task Title') ?></th>
+                    <th><?= __('Project') ?></th>
+                    <th><?= __('Status') ?></th>
+                    <th><?= __('Priority') ?></th>
+                    <th><?= __('Due Date') ?></th>
+                    <th><?= __('Actions') ?></th>
                 </tr>
             </thead>
 
@@ -29,8 +30,8 @@
 
                     // STATUS BADGE
                     $statusClass =
-                        $status === 'Completed'   ? 'bg-success' :
-                        ($status === 'In Progress' ? 'bg-primary' : 'bg-warning');
+                        $status === __('Completed')   ? 'bg-success' :
+                        ($status === __('In Progress') ? 'bg-primary' : 'bg-warning');
 
                     // PRIORITY BADGE
                     $priorityClass = match ($priority) {
@@ -79,7 +80,7 @@
                                 <button type="submit"
                                         class="btn btn-success btn-sm px-2 py-0"
                                         style="font-size:11px;">
-                                    Mark Done
+                                    <?= __('Mark Done') ?>
                                 </button>
                             </form>
                         <?php endif; ?>
@@ -90,7 +91,7 @@
             <?php else: ?>
                 <tr>
                     <td colspan="7" class="text-center text-muted">
-                        No tasks assigned yet
+                        <?= __('No tasks assigned yet') ?>
                     </td>
                 </tr>
             <?php endif; ?>

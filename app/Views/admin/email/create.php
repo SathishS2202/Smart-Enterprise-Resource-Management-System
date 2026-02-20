@@ -5,7 +5,7 @@
 
     <!-- PAGE HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
-        <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded">Send Email</h5>
+        <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded"><?= __('send_email') ?></h5>
     </div>
 
     <!-- FLASH MESSAGE -->
@@ -23,27 +23,27 @@
             <form method="POST" action="<?= BASE_URL ?>/admin/sendEmail">
 
                 <div class="mb-3">
-                    <label class="form-label">From</label>
-                    <input type="email" name="from" class="form-control" placeholder="Your Email" required>
+                    <label class="form-label"><?= __('from') ?></label>
+                    <input type="email" name="from" class="form-control" placeholder="<?= __('Your Email') ?>" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">To</label>
-                    <input type="email" name="to" class="form-control" placeholder="Recipient Email" required>
+                    <label class="form-label"><?= __('to') ?></label>
+                    <input type="email" name="to" class="form-control" placeholder="<?= __('Recipient Email') ?>" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Subject</label>
-                    <input type="text" name="subject" class="form-control" placeholder="Email Subject" required>
+                    <label class="form-label"><?= __('subject') ?></label>
+                    <input type="text" name="subject" class="form-control" placeholder="<?= __('Email Subject') ?>" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Message</label>
-                    <textarea name="message" class="form-control" rows="6" placeholder="Write your message here..." required></textarea>
+                    <label class="form-label"><?= __('message') ?></label>
+                    <textarea name="message" class="form-control" rows="6" placeholder="<?= __('Write your message here...') ?>" required></textarea>
                 </div>
 
                 <button class="btn btn-primary">
-                    <i class="bi bi-envelope"></i> Send Email
+                    <i class="bi bi-envelope"></i> <?= __('send_email') ?>
                 </button>
 
             </form>

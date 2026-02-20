@@ -9,11 +9,11 @@
 
             <!-- PAGE HEADER -->
             <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border">
-                <h5 class="mb-0 fw-normal">Edit User</h5>
+                <h5 class="mb-0 fw-normal">_<?= __('edit_user') ?></h5>
 
                 <a href="<?= BASE_URL ?>/admin/users"
                    class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-arrow-left"></i> Back
+                    <i class="bi bi-arrow-left"></i> <?= __('back') ?>
                 </a>
             </div>
 
@@ -27,21 +27,21 @@
                         <div class="row g-3">
 
                             <div class="col-md-6">
-                                <label class="form-label small">Name</label>
+                                <label class="form-label small"><?= __('name') ?></label>
                                 <input type="text" name="name"
                                        class="form-control form-control-sm"
                                        value="<?= htmlspecialchars($user['name']) ?>" required>
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label small">Username</label>
+                                <label class="form-label small"><?= __('username') ?></label>
                                 <input type="text" name="username"
                                        class="form-control form-control-sm"
                                        value="<?= htmlspecialchars($user['username']) ?>" required>
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label small">Email</label>
+                                <label class="form-label small"><?= __('email') ?></label>
                                 <input type="email" name="email"
                                        class="form-control form-control-sm"
                                        value="<?= htmlspecialchars($user['email']) ?>" required>
@@ -50,7 +50,7 @@
                         
 
                             <div class="col-md-6">
-                                <label class="form-label small">Role</label>
+                                <label class="form-label small"><?= __('role') ?></label>
                                 <select name="role_id"
                                         class="form-select form-select-sm">
                                     <?php foreach ($roles as $role): ?>
@@ -63,13 +63,13 @@
                             </div>
 
                             <div class="mb-3">
-    <label class="form-label">Status</label>
+    <label class="form-label"><?= __('status') ?></label>
     <select name="status" class="form-select">
         <option value="Active" <?= $user['status'] === 'Active' ? 'selected' : '' ?>>
-            Active
+            _<?= __('active') ?>
         </option>
         <option value="Inactive" <?= $user['status'] === 'Inactive' ? 'selected' : '' ?>>
-            Inactive
+            <?= __('inactive') ?>
         </option>
     </select>
 </div>
@@ -79,12 +79,12 @@
                         <!-- ACTIONS -->
                         <div class="mt-4">
                             <button class="btn btn-sm btn-primary">
-                                <i class="bi bi-check-circle"></i> Update User
+                                <i class="bi bi-check-circle"></i> <?= __('update_user') ?>
                             </button>
 
                             <a href="<?= BASE_URL ?>/admin/users"
                                class="btn btn-sm btn-outline-secondary ms-2">
-                                Cancel
+                                <?= __('cancel') ?>
                             </a>
                         </div>
 

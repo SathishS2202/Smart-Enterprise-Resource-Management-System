@@ -1,80 +1,83 @@
-<div class="sidebar">
-    <ul class="nav flex-column">
+<?php $rtl = APP_RTL; ?>
+
+<div class="sidebar <?= $rtl ? 'rtl-sidebar' : '' ?>">
+
+    <ul class="nav flex-column <?= $rtl ? 'text-end' : '' ?>">
 
         <li class="nav-item">
-            <a href="<?= BASE_URL ?>/admin/dashboard" class="nav-link">
+            <a href="<?= BASE_URL ?>/admin/dashboard" class="nav-link d-flex align-items-center gap-2 <?= $rtl ? 'flex-row-reverse justify-content-end' : '' ?>">
                 <i class="bi bi-speedometer2"></i>
-                <span>Dashboard</span>
+                <span><?= __('dashboard') ?></span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="<?= BASE_URL ?>/admin/users" class="nav-link">
+            <a href="<?= BASE_URL ?>/admin/users" class="nav-link d-flex align-items-center gap-2 <?= $rtl ? 'flex-row-reverse justify-content-end' : '' ?>">
                 <i class="bi bi-people"></i>
-                <span>Users</span>
+                <span><?= __('users') ?></span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="<?= BASE_URL ?>/admin/projects" class="nav-link">
+            <a href="<?= BASE_URL ?>/admin/projects" class="nav-link d-flex align-items-center gap-2 <?= $rtl ? 'flex-row-reverse justify-content-end' : '' ?>">
                 <i class="bi bi-folder"></i>
-                <span>Projects</span>
+                <span><?= __('projects') ?></span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="<?= BASE_URL ?>/admin/tasks" class="nav-link">
+            <a href="<?= BASE_URL ?>/admin/tasks" class="nav-link d-flex align-items-center gap-2 <?= $rtl ? 'flex-row-reverse justify-content-end' : '' ?>">
                 <i class="bi bi-list-task"></i>
-                <span>Tasks</span>
+                <span><?= __('tasks') ?></span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="<?= BASE_URL ?>/admin/attendance" class="nav-link">
+            <a href="<?= BASE_URL ?>/admin/attendance" class="nav-link d-flex align-items-center gap-2 <?= $rtl ? 'flex-row-reverse justify-content-end' : '' ?>">
                 <i class="bi bi-calendar-check"></i>
-                <span>Attendance</span>
+                <span><?= __('attendance') ?></span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="<?= BASE_URL ?>/admin/documents" class="nav-link">
+            <a href="<?= BASE_URL ?>/admin/documents" class="nav-link d-flex align-items-center gap-2 <?= $rtl ? 'flex-row-reverse justify-content-end' : '' ?>">
                 <i class="bi bi-file-earmark-text"></i>
-                <span>Documents</span>
+                <span><?= __('documents') ?></span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="<?= BASE_URL ?>/admin/reports" class="nav-link">
+            <a href="<?= BASE_URL ?>/admin/reports" class="nav-link d-flex align-items-center gap-2 <?= $rtl ? 'flex-row-reverse justify-content-end' : '' ?>">
                 <i class="bi bi-bar-chart"></i>
-                <span>Reports</span>
+                <span><?= __('reports') ?></span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="<?= BASE_URL ?>/admin/email" class="nav-link">
+            <a href="<?= BASE_URL ?>/admin/email" class="nav-link d-flex align-items-center gap-2 <?= $rtl ? 'flex-row-reverse justify-content-end' : '' ?>">
                 <i class="bi bi-envelope"></i>
-                <span>Send Email</span>
+                <span><?= __('send_email') ?></span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="<?= BASE_URL ?>/admin/leave_approvals" class="nav-link">
+            <a href="<?= BASE_URL ?>/admin/leave_approvals" class="nav-link d-flex align-items-center gap-2 <?= $rtl ? 'flex-row-reverse justify-content-end' : '' ?>">
                 <i class="bi bi-check2-square"></i>
-                <span>Leave Approvals</span>
+                <span><?= __('leave_approvals') ?></span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="<?= BASE_URL ?>/admin/profile" class="nav-link">
+            <a href="<?= BASE_URL ?>/admin/profile" class="nav-link d-flex align-items-center gap-2 <?= $rtl ? 'flex-row-reverse justify-content-end' : '' ?>">
                 <i class="bi bi-person-circle"></i>
-                <span>My Profile</span>
+                <span><?= __('my_profile') ?></span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a href="<?= BASE_URL ?>/admin/logout" class="nav-link text-danger">
+            <a href="<?= BASE_URL ?>/admin/logout" class="nav-link d-flex align-items-center gap-2 text-danger <?= $rtl ? 'flex-row-reverse justify-content-end' : '' ?>">
                 <i class="bi bi-box-arrow-right"></i>
-                <span>Logout</span>
+                <span><?= __('logout') ?></span>
             </a>
         </li>
 

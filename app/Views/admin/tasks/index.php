@@ -6,11 +6,11 @@
     <!-- PAGE HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
         <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded">
-            Tasks Management
+            <?= __('tasks_management') ?>
         </h5>
 
         <a href="<?= BASE_URL ?>/admin/tasksCreate" class="btn btn-sm btn-primary px-3">
-            <i class="bi bi-list-task"></i> Add Task
+            <i class="bi bi-list-task"></i> __<?= __('add_task') ?>
         </a>
     </div>
 
@@ -35,12 +35,12 @@
             <thead class="table-light text-center">
                 <tr>
                     <th style="width:50px">#</th>
-                    <th>Task Name</th>
-                    <th>Project</th>
-                    <th>Agent</th>
-                    <th style="width:120px">Start</th>
-                    <th style="width:120px">Due</th>
-                    <th style="width:110px">Status</th>
+                    <th><?= __('task_name') ?></th>
+                    <th><?= __('project') ?></th>
+                    <th><?= __('agent') ?></th>
+                    <th style="width:120px"><?= __('start_date') ?></th>
+                    <th style="width:120px"><?= __('due_date') ?></th>
+                    <th style="width:110px"><?= __('status') ?></th>
                     <th style="width:160px">Actions</th>
                 </tr>
             </thead>
@@ -56,12 +56,12 @@
     <form method="post" action="<?= BASE_URL ?>/admin/tasksAssignAgent" style="display:flex; gap:5px;">
         <input type="hidden" name="task_id" value="<?= $task['id'] ?>">
         <select name="agent_id" required>
-            <option value="">Assign Agent</option>
+            <option value="">_<?= __('assign_agent') ?></option>
             <?php foreach($agents as $agent): ?>
                 <option value="<?= $agent['id'] ?>"><?= htmlspecialchars($agent['name']) ?></option>
             <?php endforeach; ?>
         </select>
-        <button class="btn btn-sm btn-primary" type="submit">Assign</button>
+        <button class="btn btn-sm btn-primary" type="submit"><?= __('assign') ?></button>
     </form>
 <?php else: ?>
     <?= htmlspecialchars($task['agent_name']) ?>

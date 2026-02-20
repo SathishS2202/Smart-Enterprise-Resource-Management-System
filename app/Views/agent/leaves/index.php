@@ -3,8 +3,8 @@
 
 <div class="container-fluid px-4 pt-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>My Leave Requests</h4>
-        <a href="<?= BASE_URL ?>/agent/leaveSubmit" class="btn btn-primary btn-sm">Add Leave</a>
+        <h4><?= __('My Leave Requests') ?></h4>
+        <a href="<?= BASE_URL ?>/agent/leaveSubmit" class="btn btn-primary btn-sm"><?= __('Add Leave') ?></a>
     </div>
      <div class="card table-container shadow-sm">
 
@@ -12,11 +12,11 @@
         <thead class="table-light text-center">
             <tr>
                 <th>#</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Reason</th>
-                <th>Status</th>
-                <th>Submitted At</th>
+                <th><?= __('Start Date') ?></th>
+                <th><?= __('End Date') ?></th>
+                <th><?= __('Reason') ?></th>
+                <th><?= __('Status') ?></th>
+                <th><?= __('Submitted At') ?></th>
             </tr>
         </thead>
         <tbody>
@@ -29,8 +29,8 @@
                     <td><?= htmlspecialchars($leave['reason']) ?></td>
                     <td class="text-center">
     <span class="badge 
-        <?= $leave['status'] === 'Approved' ? 'bg-success' : 
-           ($leave['status'] === 'Rejected' ? 'bg-danger' : 'bg-warning text-dark') ?> 
+        <?= $leave['status'] === __('Approved') ? 'bg-success' : 
+           ($leave['status'] === __('Rejected') ? 'bg-danger' : 'bg-warning text-dark') ?> 
         small px-2 py-1" style="font-size: 0.75rem;">
         <?= htmlspecialchars($leave['status']) ?>
     </span>

@@ -5,18 +5,18 @@
 
     <!-- Header -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-        <h4 class="mb-2 mb-md-0 text-primary"><?= htmlspecialchars($status) ?> Tasks</h4>
+        <h4 class="mb-2 mb-md-0 text-primary"><?= __('Tasks') ?></h4>
 
         <div class="d-flex gap-2">
             <!-- Export Button -->
             <a href="<?= BASE_URL ?>/agent/tasks/export?status=<?= urlencode($status) ?>" 
                class="btn btn-success btn-sm">
-                <i class="bi bi-download"></i> Export
+                <i class="bi bi-download"></i> <?= __('Export') ?>
             </a>
 
             <!-- Back Button -->
             <a href="<?= BASE_URL ?>/agent/reports" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left"></i> Back
+                <i class="bi bi-arrow-left"></i> <?= __('Back') ?>
             </a>
         </div>
     </div>
@@ -31,11 +31,11 @@
                     <thead class="table-dark text-center">
                         <tr>
                             <th>#</th>
-                            <th>Task Title</th>
-                            <th>Project</th>
-                            <th>Status</th>
-                            <th>Due Date</th>
-                            <th>Created At</th>
+                            <th><?= __('Task Title') ?></th>
+                            <th><?= __('Project') ?></th>
+                            <th><?= __('Status') ?></th>
+                            <th><?= __('Due Date') ?></th>
+                            <th><?= __('Created At') ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,8 +47,8 @@
                                     <td class="text-start"><?= htmlspecialchars($task['project_name'] ?? '-') ?></td>
                                     <td>
                                         <span class="badge 
-                                            <?= $task['status'] === 'Completed' ? 'bg-success' : 
-                                                ($task['status'] === 'Pending' ? 'bg-warning text-dark' : 'bg-info text-dark') ?> 
+                                            <?= $task['status'] === __('Completed') ? 'bg-success' : 
+                                                ($task['status'] === __('Pending') ? 'bg-warning text-dark' : 'bg-info text-dark') ?> 
                                             py-1 px-2 fs-7">
                                             <?= $task['status'] ?>
                                         </span>

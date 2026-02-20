@@ -4,15 +4,15 @@
 <div class="container-fluid px-4 py-3">
 
     <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
-        <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded">Reports</h5>
+        <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded"><?= __('Reports') ?></h5>
     </div>
 
     <!-- ======================= USERS REPORTS ======================= -->
-    <h6 class="mt-3 mb-2">Users Distribution</h6>
+    <h6 class="mt-3 mb-2">_<?= __('Users Distribution') ?></h6>
     <div class="row g-4 mb-4">
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
-                <div class="card-header text-center fw-semibold">Pie Chart</div>
+                <div class="card-header text-center fw-semibold"><?= __('Pie Chart') ?></div>
                 <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
                     <canvas id="usersPie"></canvas>
                 </div>
@@ -20,7 +20,7 @@
         </div>
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
-                <div class="card-header text-center fw-semibold">Doughnut Chart</div>
+                <div class="card-header text-center fw-semibold"><?= __('Doughnut Chart') ?></div>
                 <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
                     <canvas id="usersDoughnut"></canvas>
                 </div>
@@ -28,7 +28,7 @@
         </div>
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
-                <div class="card-header text-center fw-semibold">Bar Chart</div>
+                <div class="card-header text-center fw-semibold"><?= __('Bar Chart') ?></div>
                 <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
                     <canvas id="usersBar"></canvas>
                 </div>
@@ -37,11 +37,11 @@
     </div>
 
     <!-- ======================= PROJECTS REPORTS ======================= -->
-    <h6 class="mt-3 mb-2">Projects Distribution</h6>
+    <h6 class="mt-3 mb-2">_<?= __('Projects Distribution') ?></h6>
     <div class="row g-4 mb-4">
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
-                <div class="card-header text-center fw-semibold">Pie Chart</div>
+                <div class="card-header text-center fw-semibold"><?= __('Pie Chart') ?></div>
                 <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
                     <canvas id="projectsPie"></canvas>
                 </div>
@@ -49,7 +49,7 @@
         </div>
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
-                <div class="card-header text-center fw-semibold">Doughnut Chart</div>
+                <div class="card-header text-center fw-semibold"><?= __('Doughnut Chart') ?></div>
                 <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
                     <canvas id="projectsDoughnut"></canvas>
                 </div>
@@ -57,7 +57,7 @@
         </div>
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
-                <div class="card-header text-center fw-semibold">Bar Chart</div>
+                <div class="card-header text-center fw-semibold"><?= __('Bar Chart') ?></div>
                 <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
                     <canvas id="projectsBar"></canvas>
                 </div>
@@ -66,33 +66,7 @@
     </div>
 
     <!-- ======================= TASKS REPORTS ======================= -->
-    <h6 class="mt-3 mb-2">Tasks Distribution</h6>
-    <div class="row g-4 mb-4">
-        <div class="col-md-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header text-center fw-semibold">Pie Chart</div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
-                    <canvas id="tasksPie"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header text-center fw-semibold">Doughnut Chart</div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
-                    <canvas id="tasksDoughnut"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header text-center fw-semibold">Bar Chart</div>
-                <div class="card-body d-flex justify-content-center align-items-center" style="height:250px;">
-                    <canvas id="tasksBar"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
+   
 
 </div>
 

@@ -1,4 +1,7 @@
-
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+?>
 
 <?php
 session_start();
@@ -18,6 +21,9 @@ spl_autoload_register(function ($class) {
         require_once $path;
     }
 });
+
+require_once BASE_PATH . '/core/helpers.php';
+
 
 require_once BASE_PATH . '/core/App.php';
 

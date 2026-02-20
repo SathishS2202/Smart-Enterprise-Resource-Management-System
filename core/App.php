@@ -1,37 +1,48 @@
 <?php
 namespace Core;
-require_once BASE_PATH . "/app/Controllers/AuthController.php";
 
+require_once BASE_PATH . "/app/Controllers/AuthController.php";
 
 class App {
 
    public function run()
-{
-    $url = $_GET['url'] ?? 'home/index';
-    $url = explode('/', trim($url, '/'));
+   {
+       // ✅ 1️⃣ START LANGUAGE
+       $locale = $_SESSION['locale'] ?? 'en';
 
-    $controllerName = ucfirst($url[0]) . 'Controller';
-    $controller = "App\\Controllers\\" . $controllerName;
+       // Load language file
+       \Core\Language::load($locale);
 
-    $method = $url[1] ?? 'index';
-    $param = $url[2] ?? null;
+       // ✅ 2️⃣ DEFINE GLOBAL CONSTANTS
+       $rtlLanguages = ['ar', 'he', 'fa'];
 
-    if (!class_exists($controller)) {
-        die("Controller not found");
-    }
+       define('APP_LANG', $locale);
+       define('APP_RTL', in_array($locale, $rtlLanguages));
 
-    $obj = new $controller;
+       // ✅ 3️⃣ ROUTING
+       $url = $_GET['url'] ?? 'home/index';
+       $url = explode('/', trim($url, '/'));
 
-    // 🔹 If 3rd segment exists → combine method
-    if ($param) {
-        $method = $method . ucfirst($param);
-    }
+       $controllerName = ucfirst($url[0]) . 'Controller';
+       $controller = "App\\Controllers\\" . $controllerName;
 
-    if (!method_exists($obj, $method)) {
-        die("Method not found: " . $method);
-    }
+       $method = $url[1] ?? 'index';
+       $param = $url[2] ?? null;
 
-    $obj->$method();
-}
+       if (!class_exists($controller)) {
+           die("Controller not found");
+       }
 
+       $obj = new $controller;
+
+       if ($param) {
+           $method = $method . ucfirst($param);
+       }
+
+       if (!method_exists($obj, $method)) {
+           die("Method not found: " . $method);
+       }
+
+       $obj->$method();
+   }
 }

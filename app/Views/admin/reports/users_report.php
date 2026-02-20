@@ -4,22 +4,22 @@
 <div class="container-fluid px-4 py-3">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-semibold">Users Report</h5>
+        <h5 class="fw-semibold"><?= __('Users Report') ?></h5>
 
         <!-- Export Button -->
         <a href="<?= BASE_URL ?>/admin/exportUsersReport?role=<?= urlencode($selectedRole ?? '') ?>"
            class="btn btn-sm btn-success">
-            <i class="bi bi-download"></i> Export CSV
+            <i class="bi bi-download"></i> <?= __('Export CSV') ?>
         </a>
     </div>
 
     <!-- Filter Info -->
     <div class="mb-3">
         <span class="badge bg-primary">
-            Role: <?= htmlspecialchars($selectedRole ?? 'All') ?>
+            <?= __('Role: ' . ($selectedRole ?? 'All')) ?>
         </span>
         <span class="badge bg-dark">
-            Total Users: <?= count($users ?? []) ?>
+            <?= __('Total Users: ' . count($users ?? [])) ?>
         </span>
     </div>
 
@@ -31,12 +31,12 @@
                 <thead class="table-light">
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Username</th>
-                        <th>Role</th>
-                        <th>Status</th>
-                        <th>Created At</th>
+                        <th><?= __('Name') ?></th>
+                        <th><?= __('Email') ?></th>
+                        <th><?= __('Username') ?></th>
+                        <th><?= __('Role') ?></th>
+                        <th><?= __('Status') ?></th>
+                        <th><?= __('Created At') ?></th>
                     </tr>
                 </thead>
 
@@ -55,9 +55,9 @@
                                 </td>
                                 <td>
                                     <?php if ($user['status'] === 'Active'): ?>
-                                        <span class="badge bg-success">Active</span>
+                                        <span class="badge bg-success"><?= __('Active') ?></span>
                                     <?php else: ?>
-                                        <span class="badge bg-danger">Inactive</span>
+                                        <span class="badge bg-danger"><?= __('Inactive') ?></span>
                                     <?php endif; ?>
                                 </td>
                                 <td><?= date('d M Y', strtotime($user['created_at'])) ?></td>
@@ -66,7 +66,7 @@
                     <?php else: ?>
                         <tr>
                             <td colspan="7" class="text-center text-muted">
-                                No users found.
+                                <?= __('No users found.') ?>
                             </td>
                         </tr>
                     <?php endif; ?>

@@ -6,11 +6,11 @@
     <!-- PAGE HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
         <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded">
-            Projects Management
+            <?= __('projects_management') ?>
         </h5>
 
         <a href="<?= BASE_URL ?>/admin/projectsCreate" class="btn btn-sm btn-primary px-3">
-            <i class="bi bi-folder-plus"></i> Add Project
+            <i class="bi bi-folder-plus"></i> <?= __('add_project') ?>
         </a>
     </div>
 
@@ -25,7 +25,7 @@
     <!-- SEARCH -->
     <div class="row mb-2">
         <div class="col-md-4">
-            <input type="text" id="projectSearch" class="form-control form-control-sm" placeholder="Search projects...">
+            <input type="text" id="projectSearch" class="form-control form-control-sm" placeholder="<?= __('search projects') ?>">
         </div>
     </div>
 
@@ -35,13 +35,13 @@
             <thead class="table-light text-center">
                 <tr>
                     <th style="width:50px">#</th>
-                    <th>Project Name</th>
-                    <th>Client</th>
-                    <th>Agent</th>
-                    <th style="width:120px">Start</th>
-                    <th style="width:120px">End</th>
-                    <th style="width:110px">Status</th>
-                    <th style="width:160px">Actions</th>
+                    <th>__<?= __('project_name') ?></th>
+                    <th><?= __('client') ?></th>
+                    <th><?= __('agent') ?></th>
+                    <th style="width:120px"><?= __('start_date') ?></th>
+                    <th style="width:120px"><?= __('end_date') ?></th>
+                    <th style="width:110px"><?= __('status') ?></th>
+                    <th style="width:160px"><?= __('Actions') ?></th>
                 </tr>
             </thead>
 
@@ -62,14 +62,14 @@
                                 <form method="post" action="<?= BASE_URL ?>/admin/assignAgent" class="d-flex gap-1 justify-content-center">
                                     <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
                                     <select name="agent_id" class="form-select form-select-sm" required>
-                                        <option value="">Assign</option>
+                                        <option value="">__<?= __('assign_agent') ?></option>
                                         <?php foreach ($agents as $agent): ?>
                                             <option value="<?= $agent['id'] ?>">
                                                 <?= htmlspecialchars($agent['name']) ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
-                                    <button class="btn btn-sm btn-primary">Assign</button>
+                                    <button class="btn btn-sm btn-primary"><?= __('assign') ?></button>
                                 </form>
                             <?php endif; ?>
                         </td>
@@ -88,16 +88,16 @@ $fontStyle  = "style='font-size:11px;'";
 
 switch ($status) {
     case 'Pending':
-        echo "<span class='badge bg-warning $badgeStyle' $fontStyle>Pending</span>";
+        echo "<span class='badge bg-warning $badgeStyle' $fontStyle>__" . __('Pending') . "</span>";
         break;
 
     case 'Assigned':
-        echo "<span class='badge bg-primary $badgeStyle' $fontStyle>Assigned</span>";
+        echo "<span class='badge bg-primary $badgeStyle' $fontStyle>__" . __('Assigned') . "</span>";
         break;
 
     case 'In Progress':
     case 'On Progress':
-        echo "<span class='badge bg-info $badgeStyle' $fontStyle>In Progress</span>";
+        echo "<span class='badge bg-info $badgeStyle' $fontStyle>__" . __('In Progress') . "</span>";
         break;
 
     case 'Ready for Review':
@@ -105,14 +105,14 @@ switch ($status) {
         <form method="post" action="<?= BASE_URL ?>/admin/approveProject" class="d-inline">
             <input type="hidden" name="project_id" value="<?= $project['id'] ?>">
             <button class="btn btn-success btn-sm px-2 py-0" style="font-size:11px;">
-                <i class="bi bi-check-circle"></i> Approve
+                <i class="bi bi-check-circle"></i> <?= __('approve') ?>
             </button>
         </form>
         <?php
         break;
 
     case 'Completed':
-        echo "<span class='badge bg-success $badgeStyle' $fontStyle>Completed</span>";
+        echo "<span class='badge bg-success $badgeStyle' $fontStyle>__" . __('Completed') . "</span>";
         break;
 
     default:
@@ -143,7 +143,7 @@ switch ($status) {
             <?php else: ?>
                 <tr>
                     <td colspan="8" class="text-center text-muted">
-                        No projects found
+                        <?= __('No projects found') ?>
                     </td>
                 </tr>
             <?php endif; ?>

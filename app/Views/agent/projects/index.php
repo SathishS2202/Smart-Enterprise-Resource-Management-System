@@ -3,7 +3,7 @@
 
 <div class="container-fluid px-4 pt-3">
 
-    <h3>My Projects</h3>
+    <h3><?= __('My Projects') ?></h3>
 
     <div class="card table-container mt-3">
         <table class="table table-bordered table-hover align-middle">
@@ -11,10 +11,10 @@
             <thead class="table-light text-center">
                 <tr>
                     <th>#</th>
-                    <th>Project Name</th>
-                    <th>Status</th>
-                    <th>Tasks Progress</th>
-                    <th>Action</th>
+                    <th><?= __('Project Name') ?></th>
+                    <th><?= __('Status') ?></th>
+                    <th><?= __('Tasks Progress') ?></th>
+                    <th><?= __('Action') ?></th>
                 </tr>
             </thead>
 
@@ -27,8 +27,8 @@
 
                     // Status Badge Styling
                     $statusClass =
-                        $status === 'Completed'   ? 'bg-success' :
-                        ($status === 'In Progress' ? 'bg-primary' : 'bg-warning');
+                        $status === __('Completed')   ? 'bg-success' :
+                        ($status === __('In Progress') ? 'bg-primary' : 'bg-warning');
 
                     $completed = $project['completed_tasks'] ?? 0;
                     $total     = $project['total_tasks'] ?? 0;
@@ -42,7 +42,7 @@
                     <!-- STATUS -->
                     <td class="text-center">
                         <span class="badge <?= $statusClass ?> px-2 py-1" style="font-size:11px;">
-                            <?= htmlspecialchars($status) ?>
+                            <?= htmlspecialchars(__('' . $status)) ?>
                         </span>
                     </td>
 
@@ -61,7 +61,7 @@
                                 <button type="submit"
                                         class="btn btn-success btn-sm px-2 py-0"
                                         style="font-size:11px;">
-                                    Submit for Review
+                                    <?= __('Submit for Review') ?>
                                 </button>
                             </form>
                         <?php else: ?>
@@ -75,7 +75,7 @@
             <?php else: ?>
                 <tr>
                     <td colspan="5" class="text-center text-muted">
-                        No projects assigned
+                    <?= __('No projects assigned') ?>
                     </td>
                 </tr>
             <?php endif; ?>

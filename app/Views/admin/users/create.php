@@ -3,33 +3,33 @@
 
 <div class="container-fluid px-4 pt-3" style="background-color: #f8f9fa; min-height: 85vh;">
 
-<h4>Add New User</h4>
+<h4>_<?= __('add_new_user') ?></h4>
 
 <form method="POST" action="<?= BASE_URL ?>/admin/users/store">
     <div class="mb-3">
-        <label>Name</label>
+        <label><?= __('name') ?></label>
         <input type="text" name="name" class="form-control" required>
     </div>
 
     <div class="mb-3">
-        <label>Email</label>
+        <label><?= __('email') ?></label>
         <input type="email" name="email" class="form-control" required>
     </div>
 
     <div class="mb-3">
-        <label>Username</label>
+        <label><?= __('username') ?></label>
         <input type="text" name="username" class="form-control" required>
     </div>
 
     <div class="mb-3">
-        <label>Password</label>
+        <label><?= __('password') ?></label>
         <input type="password" name="password" class="form-control" required>
     </div>
 
     <div class="mb-3">
-        <label>Role</label>
+        <label><?= __('role') ?></label>
         <select name="role_id" class="form-control" required>
-    <option value="">Select Role</option>
+    <option value="">_<?= __('select_role') ?></option>
     <?php foreach ($roles as $role): ?>
         <option value="<?= $role['id'] ?>">
             <?= $role['role_name'] ?>
@@ -39,7 +39,7 @@
         </select>
     </div>
 
-    <button class="btn btn-success">Create User</button>
-    <a href="<?= BASE_URL ?>/admin/users" class="btn btn-secondary">Back</a>
+    <button class="btn btn-success">__<?= __('create_user') ?></button>
+    <a href="<?= BASE_URL ?>/admin/users" class="btn btn-secondary">__<?= __('back') ?></a>
 </form>
 </div>

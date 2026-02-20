@@ -6,12 +6,12 @@
     <!-- PAGE HEADER -->
    <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
     <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded">
-        My Projects
+        <?= __('My Projects') ?>
     </h5>
 
    <a href="<?= BASE_URL ?>/client/projects/create"
    class="btn btn-sm btn-primary">
-    <i class="bi bi-plus-circle"></i> Add Project
+    <i class="bi bi-plus-circle"></i> <?= __('Add Project') ?>
 </a>
 
 
@@ -23,7 +23,7 @@
         <div class="col-md-4">
             <input type="text" id="projectSearch"
                    class="form-control form-control-sm"
-                   placeholder="Search projects...">
+                   placeholder="<?= __('Search projects') ?>">
         </div>
     </div>
 
@@ -33,12 +33,12 @@
             <thead class="table-light text-center">
                 <tr>
                     <th style="width:50px">#</th>
-                    <th>Project Name</th>
-                    <th>Agent</th>
-                    <th style="width:120px">Start</th>
-                    <th style="width:120px">End</th>
-                    <th style="width:110px">Status</th>
-                    <th style="width:120px">Progress</th>
+                    <th><?= __('Project Name') ?></th>
+                    <th><?= __('Agent') ?></th>
+                    <th style="width:120px"><?= __('Start Date') ?></th>
+                    <th style="width:120px"><?= __('End Date') ?></th>
+                    <th style="width:110px"><?= __('Status') ?></th>
+                    <th style="width:120px"><?= __('Progress') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -75,15 +75,15 @@
 
     case 'Active':
     case 'In Progress':
-        echo "<span class='badge bg-primary text-white px-2 py-1' style='font-size:11px'>In Progress</span>";
+        echo "<span class='badge bg-primary text-white px-2 py-1' style='font-size:11px'>" . __('In Progress') . "</span>";
         break;
 
     case 'Completed':
-        echo "<span class='badge bg-success text-white px-2 py-1' style='font-size:11px'>Completed</span>";
+        echo "<span class='badge bg-success text-white px-2 py-1' style='font-size:11px'>" . __('Completed') . "</span>";
         break;
 
     case 'On Hold':
-        echo "<span class='badge bg-secondary text-white px-2 py-1' style='font-size:11px'>On Hold</span>";
+        echo "<span class='badge bg-secondary text-white px-2 py-1' style='font-size:11px'>" . __('On Hold') . "</span>";
         break;
 
     default:
@@ -112,7 +112,7 @@
                 <?php else: ?>
                     <tr>
                         <td colspan="7" class="text-center text-muted">
-                            No projects assigned yet
+                            <?= __('No projects assigned yet') ?>
                         </td>
                     </tr>
                 <?php endif; ?>

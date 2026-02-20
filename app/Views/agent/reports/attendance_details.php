@@ -5,18 +5,18 @@
 
     <!-- Page Header -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
-        <h4 class="mb-2 mb-md-0 text-primary"><?= htmlspecialchars($status) ?> Attendance Records</h4>
+        <h4 class="mb-2 mb-md-0 text-primary"><?= __('Attendance Records') ?></h4>
 
         <div class="d-flex gap-2">
             <!-- Export Button -->
             <a href="<?= BASE_URL ?>/agent/attendance/export?status=<?= urlencode($status) ?>" 
                class="btn btn-success btn-sm">
-                <i class="bi bi-download"></i> Export
+                <i class="bi bi-download"></i> <?= __('Export') ?>
             </a>
 
             <!-- Back Button -->
             <a href="<?= BASE_URL ?>/agent/reports" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left"></i> Back
+                <i class="bi bi-arrow-left"></i> <?= __('Back') ?>
             </a>
         </div>
     </div>
@@ -31,11 +31,11 @@
                     <thead class="table-dark text-center">
                         <tr>
                             <th>#</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Check In</th>
-                            <th>Check Out</th>
-                            <th>Remarks</th>
+                            <th><?= __('Date') ?></th>
+                            <th><?= __('Status') ?></th>
+                            <th><?= __('Check In') ?></th>
+                            <th><?= __('Check Out') ?></th>
+                            <th><?= __('Remarks') ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,9 +46,9 @@
                                     <td><?= date('d M Y', strtotime($row['date'])) ?></td>
                                      <td>
     <span class="badge 
-        <?= $row['status'] === 'Present' ? 'bg-success' : 
-            ($row['status'] === 'Absent' ? 'bg-danger' : 
-            ($row['status'] === 'Late' ? 'bg-warning text-dark' : 'bg-info')) ?> 
+        <?= $row['status'] === __('Present') ? 'bg-success' : 
+            ($row['status'] === __('Absent') ? 'bg-danger' : 
+            ($row['status'] === __('Late') ? 'bg-warning text-dark' : 'bg-info')) ?> 
         py-0 px-1 fs-7">
         <?= $row['status'] ?>
     </span>
@@ -67,7 +67,7 @@
                         <?php else: ?>
                             <tr>
                                 <td colspan="6" class="text-center text-muted py-4">
-                                    <i class="bi bi-info-circle me-2"></i> No attendance records found
+                                    <i class="bi bi-info-circle me-2"></i> <?= __('No attendance records found') ?>
                                 </td>
                             </tr>
                         <?php endif; ?>

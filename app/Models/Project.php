@@ -464,7 +464,6 @@ public function countByAgentAndStatus($agentId, $status) {
 }
 
 
-
 public function getByAgentAndStatus($agentId, $status)
 {
     $stmt = $this->db->prepare("

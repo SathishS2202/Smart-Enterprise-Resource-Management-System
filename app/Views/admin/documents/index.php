@@ -3,9 +3,9 @@
 
 <div class="container-fluid px-4 pt-3">
     <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
-        <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded">Documents</h5>
+        <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded"><?= __('documents') ?></h5>
          <a href="<?= BASE_URL ?>/admin/documentsCreate" class="btn btn-sm btn-primary">
-        <i class="bi bi-upload"></i> Upload
+        <i class="bi bi-upload"></i> <?= __('upload') ?>
     </a>
 </div>
 
@@ -19,11 +19,11 @@
     <thead class="table-light text-center">
         <tr>
             <th>#</th>
-            <th>Title</th>
-            <th>Uploaded By</th>
-            <th>Date</th>
-            <th>File</th>
-            <th>Action</th>
+            <th><?= __('title') ?></th>
+            <th><?= __('uploaded_by') ?></th>
+            <th><?= __('date') ?></th>
+            <th><?= __('file') ?></th>
+            <th><?= __('actions') ?></th>
         </tr>
     </thead>
     <tbody>
@@ -37,7 +37,7 @@
                <a href="<?= BASE_URL ?>/<?= $document['file_path'] . $document['file_name'] ?>"
    target="_blank"
    class="btn btn-sm btn-outline-primary">
-   <i class="bi bi-eye"></i> View
+   <i class="bi bi-eye"></i> <?= __('view') ?>
 </a>
 
 

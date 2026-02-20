@@ -3,7 +3,7 @@
 
 <div class="container-fluid px-4 pt-3">
 
-    <h4 class="mb-4 fw-semibold">My Reports Dashboard</h4>
+    <h4 class="mb-4 fw-semibold"><?= __('My Reports Dashboard') ?></h4>
 
     <!-- ================= TASK REPORTS ================= -->
     <div class="row g-4 mb-5">
@@ -11,7 +11,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header text-center fw-semibold">
-                    Task Status (Pie)
+                    <?= __('Task Status (Pie)') ?>
                 </div>
                 <div class="card-body">
                     <canvas id="taskPieChart"></canvas>
@@ -22,7 +22,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header text-center fw-semibold">
-                    Task Status (Doughnut)
+                    <?= __('Task Status (Doughnut)') ?>
                 </div>
                 <div class="card-body">
                     <canvas id="taskDoughnutChart"></canvas>
@@ -33,7 +33,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header text-center fw-semibold">
-                    Task Status (Bar)
+                    <?= __('Task Status (Bar)') ?>
                 </div>
                 <div class="card-body">
                     <canvas id="taskBarChart"></canvas>
@@ -49,7 +49,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header text-center fw-semibold">
-                    Attendance (Pie)
+                    <?= __('Attendance (Pie)') ?>
                 </div>
                 <div class="card-body">
                     <canvas id="attendancePieChart"></canvas>
@@ -60,7 +60,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header text-center fw-semibold">
-                    Attendance (Doughnut)
+                    <?= __('Attendance (Doughnut)') ?>
                 </div>
                 <div class="card-body">
                     <canvas id="attendanceDoughnutChart"></canvas>
@@ -71,7 +71,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header text-center fw-semibold">
-                    Attendance (Bar)
+                    __Attendance (Bar)
                 </div>
                 <div class="card-body">
                     <canvas id="attendanceBarChart"></canvas>
@@ -87,7 +87,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header text-center fw-semibold">
-                    Project Status (Pie)
+                    <?= __('Project Status (Pie)') ?>
                 </div>
                 <div class="card-body">
                     <canvas id="projectPieChart"></canvas>
@@ -98,7 +98,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header text-center fw-semibold">
-                    Project Status (Doughnut)
+                    <?= __('Project Status (Doughnut)') ?>
                 </div>
                 <div class="card-body">
                     <canvas id="projectDoughnutChart"></canvas>
@@ -109,7 +109,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm h-100">
                 <div class="card-header text-center fw-semibold">
-                    Project Status (Bar)
+                    <?= __('Project Status (Bar)') ?>
                 </div>
                 <div class="card-body">
                     <canvas id="projectBarChart"></canvas>

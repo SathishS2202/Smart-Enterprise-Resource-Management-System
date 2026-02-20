@@ -6,11 +6,11 @@
     <!-- PAGE HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
         <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded">
-            Project Tasks
+            <?= __('Project Tasks') ?>
         </h5>
         <a href="<?= BASE_URL ?>/client/createTask"
    class="btn btn-primary btn-sm mb-3">
-    <i class="bi bi-plus-circle"></i> Add Task
+    <i class="bi bi-plus-circle"></i> <?= __('Add Task') ?>
 </a>
 
     </div>
@@ -21,7 +21,7 @@
             <input type="text"
                    id="taskSearch"
                    class="form-control form-control-sm"
-                   placeholder="Search tasks...">
+                   placeholder="<?= __('Search tasks') ?>...">
         </div>
     </div>
 
@@ -31,11 +31,11 @@
             <thead class="table-light text-center">
                 <tr>
                     <th style="width:50px">#</th>
-                    <th>Task Title</th>
-                    <th>Project</th>
-                    <th style="width:110px">Status</th>
-                    <th style="width:100px">Priority</th>
-                    <th style="width:120px">Due Date</th>
+                    <th><?= __('Task Title') ?></th>
+                    <th><?= __('Project') ?></th>
+                    <th style="width:110px"><?= __('Status') ?></th>
+                    <th style="width:100px"><?= __('Priority') ?></th>
+                    <th style="width:120px"><?= __('Due Date') ?></th>
                 </tr>
             </thead>
 
@@ -57,14 +57,14 @@
                         <td class="text-center">
                             <?php
                             switch ($task['status'] ?? 'Pending') {
-                                case 'Pending':
-                                    echo "<span class='badge bg-warning text-white px-2' style='font-size:11px'>Pending</span>";
+                                case __('Pending'):
+                                    echo "<span class='badge bg-warning text-white px-2' style='font-size:11px'>".__('Pending')."</span>";
                                     break;
-                                case 'In Progress':
-                                    echo "<span class='badge bg-primary text-white px-2' style='font-size:11px'>In Progress</span>";
+                                case __('In Progress'):
+                                    echo "<span class='badge bg-primary text-white px-2' style='font-size:11px'>".__('In Progress')."</span>";
                                     break;
-                                case 'Completed':
-                                    echo "<span class='badge bg-success text-white px-2' style='font-size:11px'>Completed</span>";
+                                case __('Completed'):
+                                    echo "<span class='badge bg-success text-white px-2' style='font-size:11px'>".__('Completed')."</span>";
                                     break;
                                 default:
                                     echo "<span class='badge bg-secondary text-white px-2' style='font-size:11px'>Unknown</span>";
@@ -98,7 +98,7 @@
             <?php else: ?>
                 <tr>
                     <td colspan="6" class="text-center text-muted">
-                        No tasks found
+                        <?= __('No tasks found') ?>
                     </td>
                 </tr>
             <?php endif; ?>

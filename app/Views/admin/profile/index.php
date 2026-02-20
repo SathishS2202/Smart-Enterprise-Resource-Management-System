@@ -4,7 +4,7 @@
 <div class="container-fluid px-4 pt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5 class="fw-semibold mb-0">My Profile</h5>
+        <h5 class="fw-semibold mb-0"><?= __('my_profile') ?></h5>
 
         <!-- Logout -->
        
@@ -25,11 +25,11 @@
 
                     <table class="table table-sm table-borderless">
                         <tr>
-                            <th width="35%">Username</th>
+                            <th width="35%"><?= __('username') ?></th>
                             <td><?= htmlspecialchars($user['username'] ?? '-') ?></td>
                         </tr>
                         <tr>
-                            <th>Email</th>
+                            <th><?= __('email') ?></th>
                             <td><?= htmlspecialchars($user['email'] ?? '-') ?></td>
                         </tr>
                         
@@ -39,7 +39,7 @@
                     <div class="d-grid mt-3">
                         <a href="<?= BASE_URL ?>/admin/changePassword" 
                            class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-key"></i> Change Password
+                            <i class="bi bi-key"></i> <?= __('change_password') ?>
                         </a>
                     </div>
 

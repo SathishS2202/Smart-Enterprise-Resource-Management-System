@@ -3,7 +3,7 @@
 
 <div class="container-fluid px-4 pt-3">
 
-    <h4 class="mb-4">My Profile</h4>
+    <h4 class="mb-4"><?= __('My Profile') ?></h4>
 
     <?php if (!empty($_SESSION['profile_msg'])): ?>
         <div class="alert alert-success py-2">
@@ -18,7 +18,7 @@
 
             <!-- NAME -->
             <div class="mb-3">
-                <label class="form-label fw-semibold">Full Name</label>
+                <label class="form-label fw-semibold"><?= __('Name') ?></label>
                 <input type="text"
                        name="name"
                        value="<?= htmlspecialchars($user['name'] ?? '') ?>"
@@ -28,7 +28,7 @@
 
             <!-- EMAIL (READ ONLY) -->
             <div class="mb-3">
-                <label class="form-label fw-semibold">Email</label>
+                <label class="form-label fw-semibold"><?= __('Email') ?></label>
                 <input type="email"
                        value="<?= htmlspecialchars($user['email'] ?? '') ?>"
                        class="form-control form-control-sm"
@@ -39,15 +39,15 @@
 
             <!-- ROLE -->
             <div class="mb-3">
-                <label class="form-label fw-semibold">Role</label>
+                <label class="form-label fw-semibold"><?= __('Role') ?></label>
                 <input type="text"
-                       value="<?= htmlspecialchars($user['role'] ?? 'Client') ?>"
+                       value="<?= htmlspecialchars($user['role'] ?? __('Client')) ?>"
                        class="form-control form-control-sm"
                        readonly>
             </div>
 
             <button class="btn btn-primary btn-sm px-4">
-                Update Profile
+                <?= __('Update Profile') ?>
             </button>
 
         </form>

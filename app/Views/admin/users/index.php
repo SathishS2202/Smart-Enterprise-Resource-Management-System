@@ -8,12 +8,12 @@
 <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light border rounded">
 
     <h5 class="fw-semibold mb-0 px-2 py-1 bg-white border rounded">
-        Users Management
+        _<?= __('users_management') ?>
     </h5>
 
     <a href="<?= BASE_URL ?>/admin/usersCreate"
        class="btn btn-sm btn-primary px-3">
-        <i class="bi bi-person-plus"></i> Add User
+        <i class="bi bi-person-plus"></i> <?= __('add_user') ?>
     </a>
 
 </div>
@@ -31,7 +31,7 @@
         <div class="col-md-4">
             <input type="text" id="userSearch"
                    class="form-control form-control-sm"
-                   placeholder="Search users...">
+                   placeholder="<?= __('search users') ?>">
         </div>
     </div>
 
@@ -42,12 +42,12 @@
             <thead class="table-light text-center">
                 <tr>
                     <th style="width:50px">#</th>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th style="width:120px">Role</th>
-                    <th style="width:120px">Status</th>
-                    <th style="width:160px">Actions</th>
+                    <th><?= __('name') ?></th>
+                    <th><?= __('username') ?></th>
+                    <th><?= __('email') ?></th>
+                    <th style="width:120px"><?= __('role') ?></th>
+                    <th style="width:120px"><?= __('status') ?></th>
+                    <th style="width:160px"><?= __('actions') ?></th>
                 </tr>
             </thead>
 
@@ -108,7 +108,7 @@
     <?php endforeach; ?>
 <?php else: ?>
     <tr>
-        <td colspan="7" class="text-center text-muted">No users found</td>
+        <td colspan="7" class="text-center text-muted"><?= __('no_users_found') ?></td>
     </tr>
 <?php endif; ?>
 </tbody>
